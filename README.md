@@ -18,6 +18,7 @@ skill-name/
 | Skill | Description |
 |---|---|
 | [`internal-link-audit`](./internal-link-audit/) | Audit a website's internal linking structure: broken links, orphan pages, redirect chains, click depth, anchor text quality, and link equity distribution. |
+| [`schema-markup-audit`](./schema-markup-audit/) | Audit a website's structured data: extract JSON-LD, Microdata, and RDFa, validate against schema.org and Google rich result requirements, and find missing, invalid, or incomplete markup. |
 
 ## Usage
 
