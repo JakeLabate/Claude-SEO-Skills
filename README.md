@@ -21,6 +21,9 @@ skill-name/
 | [`internal-link-audit`](./internal-link-audit/) | Audit a website's internal linking structure: broken links, orphan pages, redirect chains, click depth, anchor text quality, and link equity distribution. |
 | [`meta-data-audit`](./meta-data-audit/) | Audit a website's title tags and meta descriptions: missing, duplicate, too-long, too-short, or multiple tags, generic or boilerplate titles, and keyword stuffing. |
 | [`schema-markup-audit`](./schema-markup-audit/) | Audit a website's structured data: extract JSON-LD, Microdata, and RDFa, validate against schema.org and Google rich result requirements, and find missing, invalid, or incomplete markup. |
+| [`site-architecture-audit`](./site-architecture-audit/) | Audit a website's architecture and crawlability for SEO. Crawls the site and inspects robots.txt and XML sitemaps to find hostname/protocol duplication, URL structure problems, excessive crawl depth, weak directory taxonomy, blocked or conflicting crawl and index directives, and sitemap-to-crawl parity gaps. |
+
+
 
 ## Usage
 
