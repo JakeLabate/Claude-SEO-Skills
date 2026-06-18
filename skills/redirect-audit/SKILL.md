@@ -94,8 +94,19 @@ For each issue, give a concrete fix:
 - **Meta/JS redirects:** replace with a server-side 301.
 - Never invent the destination — base every recommended target on the final URL the chain already reaches or on the user's migration map.
 
+## Optional: export the report as a Word document
+
+If the user wants the findings as a `.docx` (for example, to share with stakeholders or attach to a ticket), save the Markdown report to a file and convert it:
+
+```bash
+python3 scripts/md_to_docx.py report.md --output report.docx
+```
+
+`scripts/md_to_docx.py` uses only the Python standard library (no `pip install`) and renders headings, tables, lists, links, bold/italic, and code blocks. Offer this whenever a user asks for a Word doc, a `.docx`, or a shareable/downloadable report.
+
 ## Resources
 
+- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
 - `references/audit-checks.md` — full definitions, thresholds, and rationale for every audit check
 - `references/report-template.md` — report output structure
 - `scripts/collect_redirects.py` — resolve the full redirect chain for a crawl, sitemap, or URL list

@@ -22,6 +22,19 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Validate skill structure and compile scripts
         run: python3 tools/validate_skills.py
+      - name: Check shared scripts are in sync
+        run: python3 tools/sync_shared.py --check
+      - name: Smoke-test the Markdown -> .docx converter
+        run: |
+          printf '# Title\n\nA **paragraph** with a [link](https://example.com).\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n- one\n- two\n' > /tmp/r.md
+          python3 tools/md_to_docx.py /tmp/r.md -o /tmp/r.docx
+          python3 - <<'PY'
+          import zipfile, xml.dom.minidom as m
+          z = zipfile.ZipFile("/tmp/r.docx")
+          assert "word/document.xml" in z.namelist(), "missing document.xml"
+          m.parseString(z.read("word/document.xml"))  # well-formed XML
+          print("docx OK")
+          PY
 
   cli:
     name: CLI smoke test (Node ${{ matrix.node-version }})

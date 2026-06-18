@@ -29,6 +29,16 @@ skill-name/
 
 All skills share one pipeline — **collect → audit → report** — and a four-level severity model (High / Medium / Low / Info). See [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md) for the full design and a guide to adding your own skill.
 
+## Export reports to Word (.docx)
+
+Every skill can hand back its report as a Word document, not just Markdown. Ask for "a Word doc", "a `.docx`", or "a shareable report" and the skill writes the report and converts it with its bundled `scripts/md_to_docx.py`:
+
+```bash
+python3 scripts/md_to_docx.py report.md --output report.docx
+```
+
+Like everything else here, the converter is **standard-library only** — a `.docx` is just a ZIP of OOXML, so no `pip install` is needed. It renders headings, tables, lists, links, bold/italic, and code blocks. The export happens after the report is written, so the `.docx` keeps the prioritized fixes and rewritten values Claude produced — it's the report reformatted, not a raw dump of the findings JSON.
+
 ## Run everything at once
 
 | Skill | Description |
