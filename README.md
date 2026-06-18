@@ -30,6 +30,37 @@ skill-name/
 | [`site-architecture-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/site-architecture-audit) | Audit a website's architecture: hostname and protocol canonicalization, robots.txt, XML sitemap parity, crawl and index directive conflicts, URL structure quality, click-depth distribution, and directory taxonomy. |
 | [`sitemap-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/sitemap-audit) | Audit a website's XML sitemaps: discovers sitemaps from robots.txt, follows sitemap index files, and validates every listed URL for non-200 status, redirects, noindex/robots-blocked URLs, canonicalized-away URLs, wrong host/protocol, duplicates, oversized sitemaps (over 50,000 URLs or 50MB), parse errors, and lastmod/priority/changefreq hygiene. |
 
-## Usage
+## Install
 
-Copy a skill folder into your Claude skills directory (e.g., `~/.claude/skills/` for Claude Code) or upload it where skills are supported. Claude will invoke the skill automatically when a request matches its description.
+Install all skills into your global Claude skills directory (`~/.claude/skills/`):
+
+```bash
+npx claude-seo-skills install
+```
+
+Other options:
+
+```bash
+# Install only specific skills
+npx claude-seo-skills install sitemap-audit robots-txt-audit
+
+# Install into the current project's ./.claude/skills instead of the global dir
+npx claude-seo-skills install --project
+
+# Install into a custom directory, overwriting anything already there
+npx claude-seo-skills install --dir ~/my-skills --force
+
+# List available skills
+npx claude-seo-skills list
+```
+
+Or install the CLI globally:
+
+```bash
+npm install -g claude-seo-skills
+claude-seo-skills install
+```
+
+## Manual usage
+
+You can also copy a skill folder into your Claude skills directory (e.g., `~/.claude/skills/` for Claude Code) or upload it where skills are supported. Claude will invoke the skill automatically when a request matches its description.
