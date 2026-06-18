@@ -1,0 +1,13 @@
+.idea/
+.claude/
+.git/
+.github/
+.gitignore
+.DS_Store
+*.log
+__pycache__/
+*.py[cod]
+tools/
+*_inventory.json
+*audit_report.json
+consolidated_report.json

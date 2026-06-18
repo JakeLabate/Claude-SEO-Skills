@@ -1,0 +1,142 @@
+# Conventions & design
+
+This document explains how every skill in this repository is built. If you want
+to understand how the audits work, read this first; if you want to add a skill,
+follow this pattern so it behaves like the rest.
+
+## The collect → audit → report pipeline
+
+Every skill separates **gathering data** from **judging it** from **explaining
+it**. This is the single most important idea in the repo.
+
+```
+            collect (a *.py "extract"/"collect" script)
+                │   crawls the site, fetches files, records raw facts
+                ▼
+        inventory.json  ← a plain, reviewable snapshot of what exists
+                │
+            audit (a *.py "audit" script)
+                │   applies checks + thresholds, assigns severities
+                ▼
+         audit_report.json  ← findings grouped by check, with a summary
+                │
+            report (Claude, guided by SKILL.md + report-template.md)
+                ▼
+         a human-readable Markdown report with prioritized fixes
+```
+
+Why split it this way:
+
+- **The collector makes the network calls; the auditor is pure.** You can re-run
+  the audit, tweak thresholds, or diff two runs without re-crawling. The auditor
+  is deterministic and easy to reason about.
+- **The inventory is the source of truth.** Every finding traces back to an
+  observed fact in the inventory — never to a guess. The reporting step is told,
+  explicitly, to never invent URLs, prices, or claims.
+- **Claude does the judgment that needs context** (writing replacement titles,
+  prioritizing by traffic), while the scripts do the judgment that should be
+  mechanical (counting characters, comparing hosts, resolving redirects).
+
+## Anatomy of a skill
+
+```
+skill-name/
+├── SKILL.md                     # YAML frontmatter (name, description) + workflow
+├── references/
+│   ├── audit-checks.md          # every check: definition, why it matters, fix
+│   └── report-template.md       # the exact Markdown structure of the output
+└── scripts/
+    ├── extract_*.py / collect_*.py   # the collector → inventory.json
+    └── audit_*.py                    # the auditor → audit_report.json
+```
+
+### `SKILL.md`
+
+- **Frontmatter** has a `name` (must equal the folder name) and a `description`.
+  The description is what Claude matches a user request against, so it names the
+  problems the skill finds *and* the trigger phrases ("audit, validate, check,
+  fix …"). Keep it specific and keyword-rich.
+- **Body** follows a fixed shape: *When to use this skill* → *Inputs to collect*
+  → *Workflow* (numbered steps that run the scripts) → a checks table with
+  severities → *Produce the report* → *Recommend fixes* → *Resources*.
+
+### `references/audit-checks.md`
+
+One entry per check, grouped by severity, each with three parts:
+**Definition** (what triggers it), **Why it matters** (the SEO rationale), and
+**Fix** (the concrete remedy). This file is the spec the auditor implements and
+the rationale Claude cites in the report.
+
+### `references/report-template.md`
+
+The literal Markdown skeleton of the final report plus a *Guidance* section. The
+guidance always enforces: name the exact URL and current value, give a concrete
+replacement, cap tables (~20 rows) and offer the full list, and never invent
+facts.
+
+## The severity model
+
+Every finding is one of four levels, applied consistently across skills:
+
+| Severity | Meaning | Examples |
+|---|---|---|
+| **High** | Actively harms indexing/ranking or breaks the page. Fix first. | Missing title, sitemap URL 404s, `Disallow: /`, broken canonical |
+| **Medium** | Real SEO quality problem, not an emergency. | Title too long, canonicalizes elsewhere, slow LCP proxy |
+| **Low** | Hygiene / polish. | Invalid `changefreq`, generic filename, future `lastmod` |
+| **Info** | Worth a look, not counted as an issue. | Title/H1 divergence, intentional patterns |
+
+The auditor emits a `severity` map and an `issues_by_severity` summary so the
+report can lead with what matters.
+
+## The "indexable contract"
+
+A recurring principle the skills enforce: **every URL you submit to search
+engines (in a sitemap, an internal link, a canonical) should be a final,
+canonical, indexable `200` page.** A URL that redirects, 404s, is noindexed, is
+blocked by robots.txt, or canonicalizes elsewhere violates that contract and is
+flagged. Many checks across the sitemap, redirect, internal-link, and
+canonical audits are specific applications of this one idea.
+
+## Standard-library only
+
+**The Python scripts depend on nothing but the Python standard library.** No
+`pip install`, no virtualenv — if you have Python 3.8+, they run. This is a
+deliberate constraint:
+
+- HTML is parsed with `html.parser.HTMLParser`, XML with
+  `xml.etree.ElementTree`, HTTP with `urllib.request`, gzip with `gzip`.
+- The only optional dependency is `brotli`, and it is imported defensively
+  (`try/except`) — present means Brotli-compressed responses get decoded, absent
+  means that one check is skipped. Nothing else is optional because nothing else
+  is needed.
+
+If you add a skill, keep this guarantee. If a check truly cannot be done with the
+stdlib, make the dependency optional and degrade gracefully.
+
+## Shared script conventions
+
+These patterns recur in every collector and are worth copying verbatim:
+
+- `USER_AGENT` and `TIMEOUT` module constants; identify the bot honestly.
+- `fetch(url) -> (status, final_url, body)` where `status == 0` means a
+  network/connection error and `body` is `None` for non-HTML or failures.
+- An `HTMLParser` subclass that extracts exactly what the audit needs and nothing
+  more.
+- Same-host BFS crawl, seeded from the sitemap when available, capped by
+  `--max-pages`.
+- Three input modes where it makes sense: a live URL (crawl), `--local` (a folder
+  of HTML files), and `--url-list` (a text file of URLs).
+- Collectors write a single `*_inventory.json`; auditors read it and write
+  `{ "summary": …, "severity": …, "findings": … }`.
+- Progress goes to `stderr` (`print(..., file=sys.stderr)`), data goes to the
+  JSON file, and the summary is echoed to `stdout`.
+
+## Adding a new skill (checklist)
+
+1. Create `skill-name/` with `SKILL.md`, `references/`, and `scripts/`.
+2. Write the collector and auditor following the conventions above.
+3. Document every check in `references/audit-checks.md` and the output shape in
+   `references/report-template.md`.
+4. Add the skill to the `SKILLS` array in `bin/cli.js`, the `files` list in
+   `package.json`, and the table in `README.md`.
+5. Run `python3 tools/validate_skills.py` until it passes.

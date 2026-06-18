@@ -1,0 +1,65 @@
+{
+  "name": "claude-seo-skills",
+  "version": "1.0.0",
+  "description": "A collection of Claude Agent Skills for SEO audits (Core Web Vitals, sitemaps, robots.txt, schema, links, headings, images, redirects, metadata, and more), with a CLI to install them into your Claude skills directory.",
+  "bin": {
+    "claude-seo-skills": "bin/cli.js"
+  },
+  "type": "commonjs",
+  "files": [
+    "bin/",
+    "canonical-tag-audit/",
+    "content-quality-audit/",
+    "core-web-vitals-audit/",
+    "external-link-audit/",
+    "full-seo-audit/",
+    "heading-structure-audit/",
+    "image-seo-audit/",
+    "internal-link-audit/",
+    "keyword-cannibalization-audit/",
+    "llms-txt-audit/",
+    "meta-data-audit/",
+    "mixed-content-audit/",
+    "open-graph-audit/",
+    "pagination-audit/",
+    "redirect-audit/",
+    "robots-txt-audit/",
+    "schema-markup-audit/",
+    "site-architecture-audit/",
+    "sitemap-audit/",
+    "soft-404-audit/",
+    "docs/",
+    "examples/",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node bin/cli.js list"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "claude-skills",
+    "agent-skills",
+    "seo",
+    "audit",
+    "core-web-vitals",
+    "sitemap",
+    "robots-txt",
+    "schema",
+    "structured-data",
+    "anthropic"
+  ],
+  "author": "Jake Labate",
+  "license": "MIT",
+  "homepage": "https://github.com/JakeLabate/Claude-SEO-Skills#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JakeLabate/Claude-SEO-Skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JakeLabate/Claude-SEO-Skills/issues"
+  },
+  "engines": {
+    "node": ">=16.7.0"
+  }
+}
