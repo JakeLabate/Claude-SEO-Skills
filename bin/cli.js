@@ -6,34 +6,32 @@ const os = require("os");
 const path = require("path");
 
 const PKG_ROOT = path.join(__dirname, "..");
+const SKILLS_DIR = path.join(PKG_ROOT, "skills");
 
-// The list of skills shipped with this package. Each entry is a top-level
-// folder containing a SKILL.md (plus optional references/ and scripts/).
-const SKILLS = [
-  "canonical-tag-audit",
-  "content-quality-audit",
-  "core-web-vitals-audit",
-  "external-link-audit",
-  "full-seo-audit",
-  "heading-structure-audit",
-  "image-seo-audit",
-  "internal-link-audit",
-  "keyword-cannibalization-audit",
-  "llms-txt-audit",
-  "meta-data-audit",
-  "mixed-content-audit",
-  "open-graph-audit",
-  "pagination-audit",
-  "redirect-audit",
-  "robots-txt-audit",
-  "schema-markup-audit",
-  "site-architecture-audit",
-  "sitemap-audit",
-  "soft-404-audit",
-];
+// Skills are discovered by scanning the `skills/` directory for any folder
+// that contains a SKILL.md. Adding a new skill is therefore drop-in: no list
+// to maintain here. Sorted for stable, alphabetical output.
+function discoverSkills() {
+  let entries;
+  try {
+    entries = fs.readdirSync(SKILLS_DIR, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  return entries
+    .filter(
+      (e) =>
+        e.isDirectory() &&
+        fs.existsSync(path.join(SKILLS_DIR, e.name, "SKILL.md"))
+    )
+    .map((e) => e.name)
+    .sort();
+}
+
+const SKILLS = discoverSkills();
 
 function readDescription(skill) {
-  const skillMd = path.join(PKG_ROOT, skill, "SKILL.md");
+  const skillMd = path.join(SKILLS_DIR, skill, "SKILL.md");
   try {
     const text = fs.readFileSync(skillMd, "utf8");
     const match = text.match(/^description:\s*(.+?)\s*$/m);
@@ -84,7 +82,7 @@ function listSkills() {
 }
 
 function copySkill(skill, targetDir, force) {
-  const src = path.join(PKG_ROOT, skill);
+  const src = path.join(SKILLS_DIR, skill);
   if (!fs.existsSync(src)) {
     console.error("  \x1b[31m✗\x1b[0m " + skill + " — not found in package");
     return false;

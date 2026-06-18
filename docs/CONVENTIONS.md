@@ -133,10 +133,11 @@ These patterns recur in every collector and are worth copying verbatim:
 
 ## Adding a new skill (checklist)
 
-1. Create `skill-name/` with `SKILL.md`, `references/`, and `scripts/`.
+1. Create `skills/skill-name/` with `SKILL.md`, `references/`, and `scripts/`.
 2. Write the collector and auditor following the conventions above.
 3. Document every check in `references/audit-checks.md` and the output shape in
    `references/report-template.md`.
-4. Add the skill to the `SKILLS` array in `bin/cli.js`, the `files` list in
-   `package.json`, and the table in `README.md`.
+4. Add the skill to the table in `README.md`. (The CLI and npm package pick it
+   up automatically — `bin/cli.js` scans `skills/` for a `SKILL.md`, and
+   `package.json` ships the whole `skills/` folder.)
 5. Run `python3 tools/validate_skills.py` until it passes.

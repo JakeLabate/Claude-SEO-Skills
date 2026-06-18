@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate every Claude skill in this repository.
 
-Checks, for each top-level `*-audit` (or otherwise skill) folder containing a SKILL.md:
+Checks, for each `skills/<skill-name>/` folder containing a SKILL.md:
 
   1. SKILL.md has YAML frontmatter delimited by `---` lines.
   2. Frontmatter has a `name:` that exactly matches the folder name.
@@ -24,9 +24,8 @@ import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Folders that are not skills even though they sit at the top level.
-NON_SKILL_DIRS = {".git", ".github", ".idea", ".claude", "bin", "node_modules",
-                  "tools", "docs", "examples"}
+# Every skill lives under skills/<skill-name>/ with a SKILL.md.
+SKILLS_DIR = os.path.join(REPO_ROOT, "skills")
 
 DESC_MAX = 1024  # description length budget (chars); Anthropic skills stay well under this
 DESC_MIN = 40
@@ -61,9 +60,11 @@ def parse_frontmatter(text):
 
 def find_skill_dirs():
     skills = []
-    for name in sorted(os.listdir(REPO_ROOT)):
-        path = os.path.join(REPO_ROOT, name)
-        if not os.path.isdir(path) or name in NON_SKILL_DIRS or name.startswith("."):
+    if not os.path.isdir(SKILLS_DIR):
+        return skills
+    for name in sorted(os.listdir(SKILLS_DIR)):
+        path = os.path.join(SKILLS_DIR, name)
+        if not os.path.isdir(path) or name.startswith("."):
             continue
         if os.path.isfile(os.path.join(path, "SKILL.md")):
             skills.append(name)
@@ -71,7 +72,7 @@ def find_skill_dirs():
 
 
 def validate_skill(name, errors, warnings):
-    path = os.path.join(REPO_ROOT, name)
+    path = os.path.join(SKILLS_DIR, name)
     skill_md = os.path.join(path, "SKILL.md")
     with open(skill_md, encoding="utf-8") as f:
         text = f.read()

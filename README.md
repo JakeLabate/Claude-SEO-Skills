@@ -4,7 +4,7 @@
 [![CI](https://github.com/JakeLabate/Claude-SEO-Skills/actions/workflows/ci.yml/badge.svg)](https://github.com/JakeLabate/Claude-SEO-Skills/actions/workflows/ci.yml)
 [![license](https://img.shields.io/npm/l/claude-seo-skills.svg)](LICENSE)
 
-A collection of [Claude skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) for SEO tasks. Each top-level folder is a self-contained, fully functional Claude skill.
+A collection of [Claude skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) for SEO tasks. Each folder under [`skills/`](skills/) is a self-contained, fully functional Claude skill.
 
 Each skill performs a real technical-SEO audit — crawling a site (or scanning local HTML), checking it against documented rules, and producing a prioritized, paste-ready report. They're built to be **read and learned from** as much as run: the rationale behind every check lives in each skill's `references/audit-checks.md`.
 
