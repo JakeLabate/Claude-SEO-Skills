@@ -22,12 +22,26 @@ Every skill folder follows the standard Claude skill structure:
 
 ```
 skill-name/
-├── SKILL.md          # Required: YAML frontmatter (name, description) + instructions
-├── references/       # Optional: reference docs loaded as needed
-└── scripts/          # Optional: executable scripts the skill can run
+├── SKILL.md                     # YAML frontmatter (name, description) + workflow
+├── references/
+│   ├── audit-checks.md          # every check: definition, why it matters, fix
+│   └── report-template.md       # the exact Markdown structure of the output
+└── scripts/
+    ├── extract_*.py / collect_*.py   # the collector → inventory.json
+    └── audit_*.py                    # the auditor → audit_report.json
 ```
 
 All skills share one pipeline — **collect → audit → report** — and a four-level severity model (High / Medium / Low / Info). See [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md) for the full design and a guide to adding your own skill.
+
+## Export reports to Word (.docx)
+
+Every skill can hand back its report as a Word document, not just Markdown. Ask for "a Word doc", "a `.docx`", or "a shareable report" and the skill writes the report and converts it with its bundled `scripts/md_to_docx.py`:
+
+```bash
+python3 scripts/md_to_docx.py report.md --output report.docx
+```
+
+Like everything else here, the converter is **standard-library only** — a `.docx` is just a ZIP of OOXML, so no `pip install` is needed. It renders headings, tables, lists, links, bold/italic, and code blocks. The export happens after the report is written, so the `.docx` keeps the prioritized fixes and rewritten values Claude produced — it's the report reformatted, not a raw dump of the findings JSON.
 
 ## Run everything at once
 

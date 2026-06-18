@@ -23,6 +23,10 @@ it**. This is the single most important idea in the repo.
             report (Claude, guided by SKILL.md + report-template.md)
                 ▼
          a human-readable Markdown report with prioritized fixes
+                │
+            export (optional — scripts/md_to_docx.py)
+                ▼
+         the same report as a Word .docx, for sharing
 ```
 
 Why split it this way:
@@ -47,7 +51,8 @@ skill-name/
 │   └── report-template.md       # the exact Markdown structure of the output
 └── scripts/
     ├── extract_*.py / collect_*.py   # the collector → inventory.json
-    └── audit_*.py                    # the auditor → audit_report.json
+    ├── audit_*.py                    # the auditor → audit_report.json
+    └── md_to_docx.py                 # shared: render the report as a .docx
 ```
 
 ### `SKILL.md`
@@ -113,6 +118,35 @@ deliberate constraint:
 If you add a skill, keep this guarantee. If a check truly cannot be done with the
 stdlib, make the dependency optional and degrade gracefully.
 
+## Exporting the report as a .docx
+
+The reporting step produces Markdown. When a user wants a shareable Word
+document, `scripts/md_to_docx.py` converts that Markdown into a `.docx`:
+
+```bash
+python3 scripts/md_to_docx.py report.md --output report.docx
+```
+
+It honors the stdlib-only guarantee — a `.docx` is a ZIP of OOXML parts, so the
+converter builds those parts with `zipfile` and string templates, no
+dependency. It renders headings, paragraphs, tables, bullet/numbered lists,
+links, bold/italic, inline code, blockquotes, and code blocks; anything fancier
+degrades to plain text rather than failing. The conversion runs *after* the
+report so Claude's judgment (prioritized fixes, rewritten titles) is preserved —
+the `.docx` is the report, reformatted, not a re-derivation from the JSON.
+
+## Shared scripts (and how they stay in sync)
+
+`md_to_docx.py` is identical in every skill. It has to be: the installer
+(`bin/cli.js`) copies skill folders **individually**, so a script in `tools/`
+alone would not exist for someone who installs just one skill. Skills are
+self-contained.
+
+The canonical copy lives at `tools/md_to_docx.py`. `tools/sync_shared.py` stamps
+it into every `skills/*/scripts/`, and `tools/validate_skills.py` fails if any
+copy drifts. So: **edit `tools/md_to_docx.py`, then run
+`python3 tools/sync_shared.py`** — never edit a per-skill copy directly.
+
 ## Shared script conventions
 
 These patterns recur in every collector and are worth copying verbatim:
@@ -140,4 +174,6 @@ These patterns recur in every collector and are worth copying verbatim:
 4. Add the skill to the table in `README.md`. (The CLI and npm package pick it
    up automatically — `bin/cli.js` scans `skills/` for a `SKILL.md`, and
    `package.json` ships the whole `skills/` folder.)
-5. Run `python3 tools/validate_skills.py` until it passes.
+5. Run `python3 tools/sync_shared.py` to drop the shared `md_to_docx.py` into the
+   new skill's `scripts/`.
+6. Run `python3 tools/validate_skills.py` until it passes.

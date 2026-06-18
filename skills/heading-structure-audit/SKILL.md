@@ -89,8 +89,19 @@ Example recommendations:
 - `/blog/post-1` jumps from H2 to H4 under "Methodology" — change the H4 subsections to H3
 - Merge the two H1s on the homepage; demote the tagline H1 to a paragraph and keep the brand-value H1
 
+## Optional: export the report as a Word document
+
+If the user wants the findings as a `.docx` (for example, to share with stakeholders or attach to a ticket), save the Markdown report to a file and convert it:
+
+```bash
+python3 scripts/md_to_docx.py report.md --output report.docx
+```
+
+`scripts/md_to_docx.py` uses only the Python standard library (no `pip install`) and renders headings, tables, lists, links, bold/italic, and code blocks. Offer this whenever a user asks for a Word doc, a `.docx`, or a shareable/downloadable report.
+
 ## Resources
 
+- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
 - `references/audit-checks.md` — full definitions, thresholds, and rationale for every audit check
 - `references/report-template.md` — report output structure
 - `scripts/extract_headings.py` — crawl a site and build the heading inventory

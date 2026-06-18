@@ -113,6 +113,29 @@ def validate_skill(name, errors, warnings):
         warnings.append(f"{name}: no references/ folder found")
 
 
+def check_shared_scripts(skills, errors):
+    """Each skill ships its own copy of md_to_docx.py (skills are self-contained,
+    and the installer copies folders individually). Assert every copy is
+    byte-identical to the canonical tools/md_to_docx.py so they never drift."""
+    canonical = os.path.join(REPO_ROOT, "tools", "md_to_docx.py")
+    if not os.path.isfile(canonical):
+        errors.append("tools/md_to_docx.py is missing (canonical .docx converter)")
+        return
+    with open(canonical, "rb") as f:
+        want = f.read()
+    for name in skills:
+        copy = os.path.join(SKILLS_DIR, name, "scripts", "md_to_docx.py")
+        if not os.path.isfile(copy):
+            errors.append(f"{name}: missing scripts/md_to_docx.py (run tools/sync_shared.py)")
+            continue
+        with open(copy, "rb") as f:
+            if f.read() != want:
+                errors.append(
+                    f"{name}/scripts/md_to_docx.py differs from tools/md_to_docx.py "
+                    "(run tools/sync_shared.py)"
+                )
+
+
 def compile_all_python(errors):
     for root, dirs, files in os.walk(REPO_ROOT):
         dirs[:] = [d for d in dirs if d not in {".git", ".github", ".idea", "node_modules"}]
@@ -138,6 +161,7 @@ def main():
     for name in skills:
         validate_skill(name, errors, warnings)
 
+    check_shared_scripts(skills, errors)
     compile_all_python(errors)
 
     print(f"Validated {len(skills)} skill(s): {', '.join(skills)}\n")
