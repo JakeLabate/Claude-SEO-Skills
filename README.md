@@ -22,9 +22,13 @@ Every skill folder follows the standard Claude skill structure:
 
 ```
 skill-name/
-├── SKILL.md          # Required: YAML frontmatter (name, description) + instructions
-├── references/       # Optional: reference docs loaded as needed
-└── scripts/          # Optional: executable scripts the skill can run
+├── SKILL.md                     # YAML frontmatter (name, description) + workflow
+├── references/
+│   ├── audit-checks.md          # every check: definition, why it matters, fix
+│   └── report-template.md       # the exact Markdown structure of the output
+└── scripts/
+    ├── extract_*.py / collect_*.py   # the collector → inventory.json
+    └── audit_*.py                    # the auditor → audit_report.json
 ```
 
 All skills share one pipeline — **collect → audit → report** — and a four-level severity model (High / Medium / Low / Info). See [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md) for the full design and a guide to adding your own skill.
