@@ -29,9 +29,9 @@ it**. This is the single most important idea in the repo.
                 ▼
          a human-readable Markdown report with prioritized fixes
                 │
-            export (optional — scripts/md_to_docx.py)
-                ▼
-         the same report as a Word .docx, for sharing
+            export (optional)
+                ├─ scripts/md_to_docx.py    → the same report as a Word .docx, for sharing
+                └─ scripts/findings_to_csv.py → audit_report.json as a flat CSV, for spreadsheets
 ```
 
 **Fetch is split out from extract** so a site is crawled a single time and every
@@ -70,7 +70,8 @@ skill-name/
     ├── fetch_pages.py                # shared: crawl once → page_cache.json (crawl skills)
     ├── extract_*.py / collect_*.py   # the extractor → inventory.json (reads --from-cache)
     ├── audit_*.py                    # the auditor → audit_report.json
-    └── md_to_docx.py                 # shared: render the report as a .docx
+    ├── md_to_docx.py                 # shared: render the report as a .docx
+    └── findings_to_csv.py            # shared: flatten audit_report.json → findings.csv
 ```
 
 ### `SKILL.md`
@@ -136,31 +137,52 @@ deliberate constraint:
 If you add a skill, keep this guarantee. If a check truly cannot be done with the
 stdlib, make the dependency optional and degrade gracefully.
 
-## Exporting the report as a .docx
+## Exporting the report (.docx and .csv)
 
-The reporting step produces Markdown. When a user wants a shareable Word
-document, `scripts/md_to_docx.py` converts that Markdown into a `.docx`:
+The reporting step produces Markdown. Two optional, stdlib-only converters turn
+it (or the findings behind it) into shareable formats.
+
+**Word document.** When a user wants a shareable Word document,
+`scripts/md_to_docx.py` converts the Markdown report into a `.docx`:
 
 ```bash
 python3 scripts/md_to_docx.py report.md --output report.docx
 ```
 
-It honors the stdlib-only guarantee — a `.docx` is a ZIP of OOXML parts, so the
-converter builds those parts with `zipfile` and string templates, no
-dependency. It renders headings, paragraphs, tables, bullet/numbered lists,
-links, bold/italic, inline code, blockquotes, and code blocks; anything fancier
-degrades to plain text rather than failing. The conversion runs *after* the
-report so Claude's judgment (prioritized fixes, rewritten titles) is preserved —
-the `.docx` is the report, reformatted, not a re-derivation from the JSON.
+A `.docx` is a ZIP of OOXML parts, so the converter builds those parts with
+`zipfile` and string templates, no dependency. It renders headings, paragraphs,
+tables, bullet/numbered lists, links, bold/italic, inline code, blockquotes, and
+code blocks; anything fancier degrades to plain text rather than failing. The
+conversion runs *after* the report so Claude's judgment (prioritized fixes,
+rewritten titles) is preserved — the `.docx` is the report, reformatted, not a
+re-derivation from the JSON.
+
+**CSV of findings.** When a user wants the data itself — to filter, sort, or
+triage in a spreadsheet — `scripts/findings_to_csv.py` flattens the auditor's
+`audit_report.json` into a CSV, one row per finding:
+
+```bash
+python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
+```
+
+It uses the `csv` module only. Because every auditor writes the same
+`{ "summary", "severity", "findings" }` shape, one converter works for all
+skills: it prepends `check` and `severity` columns, then unions each finding's
+fields in first-seen order (list values like duplicate-sharing pages are joined
+with `; `, dicts are JSON-encoded). Unlike the `.docx`, this *is* a direct dump
+of the structured findings — the Word doc is for stakeholders, the CSV for
+working the issue list.
 
 ## Shared scripts (and how they stay in sync)
 
-Two scripts are shared across skills and must be byte-identical everywhere they
+Three scripts are shared across skills and must be byte-identical everywhere they
 appear. They have to be: the installer (`bin/cli.js`) copies skill folders
 **individually**, so a script in `tools/` alone would not exist for someone who
 installs just one skill. Skills are self-contained.
 
 - `md_to_docx.py` — the Markdown→.docx converter — goes into **every** skill.
+- `findings_to_csv.py` — the `audit_report.json`→CSV flattener — goes into
+  **every** skill.
 - `fetch_pages.py` — the shared crawl-once fetch stage — goes into the
   **crawl-based** skills that read its cache via `--from-cache`, plus the
   `full-seo-audit` orchestrator that runs it once.
@@ -200,6 +222,6 @@ These patterns recur in every collector and are worth copying verbatim:
 4. Add the skill to the table in `README.md`. (The CLI and npm package pick it
    up automatically — `bin/cli.js` scans `skills/` for a `SKILL.md`, and
    `package.json` ships the whole `skills/` folder.)
-5. Run `python3 tools/sync_shared.py` to drop the shared `md_to_docx.py` into the
-   new skill's `scripts/`.
+5. Run `python3 tools/sync_shared.py` to drop the shared scripts
+   (`md_to_docx.py`, `findings_to_csv.py`) into the new skill's `scripts/`.
 6. Run `python3 tools/validate_skills.py` until it passes.

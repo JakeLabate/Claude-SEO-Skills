@@ -117,9 +117,11 @@ For each issue, give a concrete fix:
 - **llms-full.txt:** if the user wants full-content ingestion, generate `/llms-full.txt` with the expanded page contents.
 - Base every recommendation on the observed file; quote the exact line to change and do not invent URLs.
 
-## Optional: export the report as a Word document
+## Optional: export the report
 
-If the user wants the findings as a `.docx` (for example, to share with stakeholders or attach to a ticket), save the Markdown report to a file and convert it:
+### As a Word document (.docx)
+
+If the user wants the report as a `.docx` (for example, to share with stakeholders or attach to a ticket), save the Markdown report to a file and convert it:
 
 ```bash
 python3 scripts/md_to_docx.py report.md --output report.docx
@@ -127,9 +129,20 @@ python3 scripts/md_to_docx.py report.md --output report.docx
 
 `scripts/md_to_docx.py` uses only the Python standard library (no `pip install`) and renders headings, tables, lists, links, bold/italic, and code blocks. Offer this whenever a user asks for a Word doc, a `.docx`, or a shareable/downloadable report.
 
+### As a CSV of findings (.csv)
+
+If the user wants the raw findings as a spreadsheet (for filtering, sorting, or triage in Sheets or Excel), convert the audit's `audit_report.json` directly:
+
+```bash
+python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
+```
+
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+
 ## Resources
 
 - `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
 - `references/audit-checks.md` — full definitions and rationale for every audit check
 - `references/report-template.md` — report output structure
 - `scripts/collect_llms.py` — fetch, parse, and probe a site's llms.txt
