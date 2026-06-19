@@ -128,6 +128,26 @@ def parse_page(url, html):
     return {"title": parser.title, "headings": parser.headings}, parser.links
 
 
+def extract_from_cache(cache_path):
+    """Pure: turn a shared page cache (from fetch_pages.py) into a heading inventory.
+
+    No network — parses the cached HTML for exactly the fields this audit needs.
+    """
+    with open(cache_path, encoding="utf-8") as f:
+        cache = json.load(f)
+    pages = {}
+    for url, page in cache.get("pages", {}).items():
+        html = page.get("html")
+        status = page.get("status", 0)
+        if not html:
+            pages[url] = {"status": status, "title": None, "headings": []}
+            continue
+        info, _links = parse_page(page.get("final_url") or url, html)
+        info["status"] = status
+        pages[url] = info
+    return cache.get("site", cache_path), pages
+
+
 def crawl(site, max_pages):
     start = site.rstrip("/")
     host = norm_host(start)
@@ -184,22 +204,29 @@ def scan_url_list(path, max_pages):
 
 def main():
     ap = argparse.ArgumentParser(description="Build a heading inventory for a site.")
-    ap.add_argument("source", help="Site root URL, local folder (--local), or URL list file (--url-list)")
+    ap.add_argument("source", nargs="?",
+                    help="Site root URL, local folder (--local), or URL list file (--url-list)")
+    ap.add_argument("--from-cache",
+                    help="Extract from a shared page cache produced by fetch_pages.py (no network)")
     ap.add_argument("--max-pages", type=int, default=500)
     ap.add_argument("--output", default="heading_inventory.json")
     ap.add_argument("--local", action="store_true", help="Treat source as a local folder of HTML files")
     ap.add_argument("--url-list", action="store_true", help="Treat source as a text file of URLs")
     args = ap.parse_args()
 
-    if args.local:
-        pages = scan_local(args.source)
+    if args.from_cache:
+        site, pages = extract_from_cache(args.from_cache)
+    elif not args.source:
+        ap.error("provide a source, or --from-cache page_cache.json")
+    elif args.local:
+        site, pages = args.source, scan_local(args.source)
     elif args.url_list:
-        pages = scan_url_list(args.source, args.max_pages)
+        site, pages = args.source, scan_url_list(args.source, args.max_pages)
     else:
-        pages = crawl(args.source, args.max_pages)
+        site, pages = args.source, crawl(args.source, args.max_pages)
 
     with open(args.output, "w", encoding="utf-8") as f:
-        json.dump({"site": args.source, "pages": pages}, f, indent=2, ensure_ascii=False)
+        json.dump({"site": site, "pages": pages}, f, indent=2, ensure_ascii=False)
     total = sum(len(p.get("headings", [])) for p in pages.values())
     print(f"Wrote {len(pages)} pages ({total} headings) to {args.output}", file=sys.stderr)
 

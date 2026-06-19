@@ -102,50 +102,94 @@ def norm_host(url):
     return host[4:] if host.startswith("www.") else host
 
 
+def external_in(source_url, final_url, html, host):
+    """Return (external_link_records, internal_targets) parsed from one page."""
+    parser = LinkParser(final_url)
+    try:
+        parser.feed(html)
+    except Exception:
+        pass
+    external, internal = [], []
+    for link in parser.links:
+        target = link["target"]
+        if not target.startswith(("http://", "https://")):
+            continue
+        if norm_host(target) == host:
+            internal.append(target)
+            continue
+        external.append({"source": source_url, "domain": norm_host(target), **link})
+    return external, internal
+
+
+def extract_from_cache(cache_path):
+    """Pure: collect external links from a shared page cache (from fetch_pages.py).
+
+    No network — the link checking lives in check_external_links.py, which still
+    probes the external URLs.
+    """
+    with open(cache_path, encoding="utf-8") as f:
+        cache = json.load(f)
+    pages = cache.get("pages", {})
+    site = cache.get("site", cache_path)
+    host = norm_host(site) if site.startswith(("http://", "https://")) else ""
+    if not host:
+        for page in pages.values():
+            if page.get("final_url", "").startswith(("http://", "https://")):
+                host = norm_host(page["final_url"])
+                break
+    external_links, crawled = [], 0
+    for url, page in pages.items():
+        html = page.get("html")
+        if not html:
+            continue
+        crawled += 1
+        out, _internal = external_in(url, page.get("final_url") or url, html, host)
+        external_links.extend(out)
+    return site, crawled, external_links
+
+
 def main():
     ap = argparse.ArgumentParser(description="Crawl a site and collect external links.")
-    ap.add_argument("start_url")
+    ap.add_argument("start_url", nargs="?")
+    ap.add_argument("--from-cache",
+                    help="Extract from a shared page cache produced by fetch_pages.py (no network)")
     ap.add_argument("--max-pages", type=int, default=500)
     ap.add_argument("--max-depth", type=int, default=5)
     ap.add_argument("--output", default="external_links.json")
     args = ap.parse_args()
 
-    start = args.start_url.rstrip("/")
-    host = norm_host(start)
-    external_links = []
-    crawled = set()
-    queue = deque([(start, 0)])
-    seen = {start}
+    if args.from_cache:
+        start, pages_crawled, external_links = extract_from_cache(args.from_cache)
+    elif not args.start_url:
+        ap.error("provide a start_url, or --from-cache page_cache.json")
+    else:
+        start = args.start_url.rstrip("/")
+        host = norm_host(start)
+        external_links = []
+        crawled = set()
+        queue = deque([(start, 0)])
+        seen = {start}
 
-    while queue and len(crawled) < args.max_pages:
-        url, depth = queue.popleft()
-        status, final_url, html = fetch(url)
-        crawled.add(url)
-        print(f"[{status}] depth={depth} {url}", file=sys.stderr)
+        while queue and len(crawled) < args.max_pages:
+            url, depth = queue.popleft()
+            status, final_url, html = fetch(url)
+            crawled.add(url)
+            print(f"[{status}] depth={depth} {url}", file=sys.stderr)
 
-        if not html:
-            continue
-        parser = LinkParser(final_url)
-        try:
-            parser.feed(html)
-        except Exception:
-            pass
-        for link in parser.links:
-            target = link["target"]
-            if not target.startswith(("http://", "https://")):
+            if not html:
                 continue
-            if norm_host(target) == host:
-                # internal: follow for crawling, don't record
+            out, internal = external_in(url, final_url, html, host)
+            external_links.extend(out)
+            for target in internal:
                 if target not in seen and depth + 1 <= args.max_depth:
                     seen.add(target)
                     queue.append((target, depth + 1))
-                continue
-            external_links.append({"source": url, "domain": norm_host(target), **link})
+        pages_crawled = len(crawled)
 
     with open(args.output, "w") as f:
-        json.dump({"site": start, "pages_crawled": len(crawled),
+        json.dump({"site": start, "pages_crawled": pages_crawled,
                    "links": external_links}, f, indent=2)
-    print(f"Wrote {len(external_links)} external links from {len(crawled)} pages to {args.output}",
+    print(f"Wrote {len(external_links)} external links from {pages_crawled} pages to {args.output}",
           file=sys.stderr)
 
 

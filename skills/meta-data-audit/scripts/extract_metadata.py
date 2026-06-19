@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-"""Crawl a website (or scan local HTML files) and build a title/meta description inventory as JSON.
+"""Build a title/meta description inventory as JSON.
 
-Usage:
+Preferred: extract from a shared page cache produced by the shared fetch stage
+(`fetch_pages.py`), so the site is crawled once and every audit reuses it:
+
+    python3 extract_metadata.py --from-cache page_cache.json [--output metadata_inventory.json]
+
+Standalone (fetches on its own — fine for a single-area run):
     python3 extract_metadata.py https://example.com [--max-pages 500] [--output metadata_inventory.json]
     python3 extract_metadata.py ./site-folder --local [--output metadata_inventory.json]
     python3 extract_metadata.py urls.txt --url-list [--output metadata_inventory.json]
@@ -159,6 +164,34 @@ def parse_page(url, html):
     return info, parser.links
 
 
+def empty_record(status):
+    return {"status": status, "titles": [], "descriptions": [], "h1": None,
+            "canonical": None, "meta_robots": None,
+            "og_title": None, "og_description": None}
+
+
+def extract_from_cache(cache_path):
+    """Pure: turn a shared page cache (from fetch_pages.py) into a metadata inventory.
+
+    Makes no network calls — parses the cached HTML for exactly the fields this
+    audit needs. This is the half of the old collector that stays after fetching
+    is factored out into the shared fetch stage.
+    """
+    with open(cache_path, encoding="utf-8") as f:
+        cache = json.load(f)
+    pages = {}
+    for url, page in cache.get("pages", {}).items():
+        html = page.get("html")
+        status = page.get("status", 0)
+        if not html:
+            pages[url] = empty_record(status)
+            continue
+        info, _links = parse_page(page.get("final_url") or url, html)
+        info["status"] = status
+        pages[url] = info
+    return cache.get("site", cache_path), pages
+
+
 def crawl(site, max_pages):
     start = site.rstrip("/")
     host = norm_host(start)
@@ -171,9 +204,7 @@ def crawl(site, max_pages):
         status, final_url, html = fetch(url)
         print(f"[{status}] {url}", file=sys.stderr)
         if html is None:
-            pages[url] = {"status": status, "titles": [], "descriptions": [], "h1": None,
-                          "canonical": None, "meta_robots": None,
-                          "og_title": None, "og_description": None}
+            pages[url] = empty_record(status)
             continue
         info, links = parse_page(final_url, html)
         info["status"] = status
@@ -207,9 +238,7 @@ def scan_url_list(path, max_pages):
         status, final_url, html = fetch(url)
         print(f"[{status}] {url}", file=sys.stderr)
         if html is None:
-            pages[url] = {"status": status, "titles": [], "descriptions": [], "h1": None,
-                          "canonical": None, "meta_robots": None,
-                          "og_title": None, "og_description": None}
+            pages[url] = empty_record(status)
             continue
         info, _links = parse_page(final_url, html)
         info["status"] = status
@@ -219,22 +248,29 @@ def scan_url_list(path, max_pages):
 
 def main():
     ap = argparse.ArgumentParser(description="Build a title/meta description inventory for a site.")
-    ap.add_argument("source", help="Site root URL, local folder (--local), or URL list file (--url-list)")
+    ap.add_argument("source", nargs="?",
+                    help="Site root URL, local folder (--local), or URL list file (--url-list)")
+    ap.add_argument("--from-cache",
+                    help="Extract from a shared page cache produced by fetch_pages.py (no network)")
     ap.add_argument("--max-pages", type=int, default=500)
     ap.add_argument("--output", default="metadata_inventory.json")
     ap.add_argument("--local", action="store_true", help="Treat source as a local folder of HTML files")
     ap.add_argument("--url-list", action="store_true", help="Treat source as a text file of URLs")
     args = ap.parse_args()
 
-    if args.local:
-        pages = scan_local(args.source)
+    if args.from_cache:
+        site, pages = extract_from_cache(args.from_cache)
+    elif not args.source:
+        ap.error("provide a source, or --from-cache page_cache.json")
+    elif args.local:
+        site, pages = args.source, scan_local(args.source)
     elif args.url_list:
-        pages = scan_url_list(args.source, args.max_pages)
+        site, pages = args.source, scan_url_list(args.source, args.max_pages)
     else:
-        pages = crawl(args.source, args.max_pages)
+        site, pages = args.source, crawl(args.source, args.max_pages)
 
     with open(args.output, "w", encoding="utf-8") as f:
-        json.dump({"site": args.source, "pages": pages}, f, indent=2, ensure_ascii=False)
+        json.dump({"site": site, "pages": pages}, f, indent=2, ensure_ascii=False)
     titles = sum(len(p["titles"]) for p in pages.values())
     descs = sum(len(p["descriptions"]) for p in pages.values())
     print(f"Wrote {len(pages)} pages ({titles} titles, {descs} descriptions) to {args.output}",

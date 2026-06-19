@@ -152,6 +152,27 @@ def parse_page(url, html):
     return {"images": parser.images}, parser.links
 
 
+def extract_from_cache(cache_path):
+    """Pure: turn a shared page cache (from fetch_pages.py) into an image inventory.
+
+    No network — parses the cached HTML for exactly the fields this audit needs.
+    (The optional --check-files image HEAD-probe still hits the network if asked.)
+    """
+    with open(cache_path, encoding="utf-8") as f:
+        cache = json.load(f)
+    pages = {}
+    for url, page in cache.get("pages", {}).items():
+        html = page.get("html")
+        status = page.get("status", 0)
+        if not html:
+            pages[url] = {"status": status, "images": []}
+            continue
+        info, _links = parse_page(page.get("final_url") or url, html)
+        info["status"] = status
+        pages[url] = info
+    return cache.get("site", cache_path), pages
+
+
 def crawl(site, max_pages):
     start = site.rstrip("/")
     host = norm_host(start)
@@ -222,7 +243,10 @@ def check_files(pages):
 
 def main():
     ap = argparse.ArgumentParser(description="Build an image inventory for a site.")
-    ap.add_argument("source", help="Site root URL, local folder (--local), or URL list file (--url-list)")
+    ap.add_argument("source", nargs="?",
+                    help="Site root URL, local folder (--local), or URL list file (--url-list)")
+    ap.add_argument("--from-cache",
+                    help="Extract from a shared page cache produced by fetch_pages.py (no network)")
     ap.add_argument("--max-pages", type=int, default=500)
     ap.add_argument("--output", default="image_inventory.json")
     ap.add_argument("--local", action="store_true", help="Treat source as a local folder of HTML files")
@@ -231,14 +255,18 @@ def main():
                     help="HEAD-request each image URL to record status, type, and byte size")
     args = ap.parse_args()
 
-    if args.local:
-        pages = scan_local(args.source)
+    if args.from_cache:
+        site, pages = extract_from_cache(args.from_cache)
+    elif not args.source:
+        ap.error("provide a source, or --from-cache page_cache.json")
+    elif args.local:
+        site, pages = args.source, scan_local(args.source)
     elif args.url_list:
-        pages = scan_url_list(args.source, args.max_pages)
+        site, pages = args.source, scan_url_list(args.source, args.max_pages)
     else:
-        pages = crawl(args.source, args.max_pages)
+        site, pages = args.source, crawl(args.source, args.max_pages)
 
-    out = {"site": args.source, "checked_files": bool(args.check_files), "pages": pages}
+    out = {"site": site, "checked_files": bool(args.check_files), "pages": pages}
     if args.check_files:
         out["files"] = check_files(pages)
 

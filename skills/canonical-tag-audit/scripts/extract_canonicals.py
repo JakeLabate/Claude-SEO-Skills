@@ -146,6 +146,30 @@ def empty_page(status, final_url):
             "header_canonical": None, "meta_robots": None, "x_robots": None}
 
 
+def extract_from_cache(cache_path):
+    """Pure: turn a shared page cache (from fetch_pages.py) into a canonical inventory.
+
+    Reads the cached HTML *and response headers* (the Link: rel=canonical and
+    X-Robots-Tag headers this audit needs). The canonical-target probe is left to
+    the caller — those targets may sit outside the crawl set.
+    """
+    with open(cache_path, encoding="utf-8") as f:
+        cache = json.load(f)
+    pages = {}
+    for url, page in cache.get("pages", {}).items():
+        html = page.get("html")
+        status = page.get("status", 0)
+        final_url = page.get("final_url") or url
+        if not html:
+            pages[url] = empty_page(status, final_url)
+            continue
+        info, _links = parse_page(final_url, html, page.get("headers") or {})
+        info["status"] = status
+        info["final_url"] = final_url
+        pages[url] = info
+    return cache.get("site", cache_path), pages
+
+
 def collect(urls_iter, max_pages, crawl_host=None):
     pages = {}
     queue = deque(urls_iter)
@@ -186,26 +210,33 @@ def probe_targets(pages):
 
 def main():
     ap = argparse.ArgumentParser(description="Build a canonical-tag inventory for a site.")
-    ap.add_argument("source", help="Site root URL, or URL list file with --url-list")
+    ap.add_argument("source", nargs="?", help="Site root URL, or URL list file with --url-list")
+    ap.add_argument("--from-cache",
+                    help="Extract from a shared page cache produced by fetch_pages.py (no crawl)")
     ap.add_argument("--max-pages", type=int, default=500)
     ap.add_argument("--output", default="canonical_inventory.json")
     ap.add_argument("--url-list", action="store_true")
     ap.add_argument("--no-probe", action="store_true", help="skip probing canonical targets")
     args = ap.parse_args()
 
-    if args.url_list:
+    if args.from_cache:
+        site, pages = extract_from_cache(args.from_cache)
+    elif not args.source:
+        ap.error("provide a source, or --from-cache page_cache.json")
+    elif args.url_list:
         with open(args.source, encoding="utf-8") as f:
             urls = [l.strip() for l in f if l.strip() and not l.startswith("#")]
-        pages = collect(urls[: args.max_pages], args.max_pages)
+        site, pages = args.source, collect(urls[: args.max_pages], args.max_pages)
     else:
         start = args.source.rstrip("/")
         seeds = pages_from_sitemap(start) or [start]
-        pages = collect(seeds[: args.max_pages], args.max_pages, crawl_host=norm_host(start))
+        site, pages = args.source, collect(seeds[: args.max_pages], args.max_pages,
+                                           crawl_host=norm_host(start))
 
     targets = {} if args.no_probe else probe_targets(pages)
 
     with open(args.output, "w", encoding="utf-8") as f:
-        json.dump({"site": args.source, "pages": pages, "targets": targets},
+        json.dump({"site": site, "pages": pages, "targets": targets},
                   f, indent=2, ensure_ascii=False)
     print(f"Wrote {len(pages)} pages, {len(targets)} canonical targets to {args.output}",
           file=sys.stderr)

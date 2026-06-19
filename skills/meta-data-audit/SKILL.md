@@ -42,6 +42,13 @@ python3 scripts/extract_metadata.py https://example.com --max-pages 500 --output
 
 For every page, the inventory records: every `<title>` and `<meta name="description">` value (including duplicates), the first `<h1>`, canonical URL, meta robots, and `og:title`/`og:description` for comparison.
 
+If you've already crawled the site once into a shared page cache (e.g. as part of a full SEO audit), skip the crawl and extract from it instead — same inventory, no extra network:
+
+```bash
+python3 scripts/fetch_pages.py https://example.com --output page_cache.json   # crawl once
+python3 scripts/extract_metadata.py --from-cache page_cache.json --output metadata_inventory.json
+```
+
 ### Step 2: Run the audit checks
 
 Use `scripts/audit_metadata.py` to run all audit checks against the inventory:

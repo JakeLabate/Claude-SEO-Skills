@@ -6,10 +6,13 @@ several skills rely on cannot live only in tools/ — it must exist inside each
 skill's scripts/ folder. tools/ holds the canonical copy; this script stamps it
 into every skill. tools/validate_skills.py fails CI if any copy drifts.
 
-Currently shared: md_to_docx.py (Markdown report -> Word .docx converter).
+Shared scripts and their targets:
+  - md_to_docx.py  (Markdown report -> Word .docx converter) -> every skill
+  - fetch_pages.py (crawl once -> shared page cache)          -> crawl-based skills
+    that read the cache via `--from-cache`, plus the full-seo-audit orchestrator.
 
 Usage:
-    python3 tools/sync_shared.py          # copy into every skill
+    python3 tools/sync_shared.py          # copy into target skills
     python3 tools/sync_shared.py --check  # report drift, exit non-zero, copy nothing
 """
 
@@ -19,7 +22,21 @@ import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SKILLS_DIR = os.path.join(REPO_ROOT, "skills")
-SHARED = ["md_to_docx.py"]
+
+# Crawl-based skills whose extractor reads a shared page cache (--from-cache),
+# plus full-seo-audit, which runs fetch_pages.py once to feed them all.
+CACHE_SKILLS = {
+    "canonical-tag-audit", "content-quality-audit", "external-link-audit",
+    "heading-structure-audit", "image-seo-audit", "keyword-cannibalization-audit",
+    "meta-data-audit", "mixed-content-audit", "open-graph-audit", "pagination-audit",
+    "schema-markup-audit", "soft-404-audit", "full-seo-audit",
+}
+
+# filename -> set of target skill names, or None meaning "every skill".
+SHARED = {
+    "md_to_docx.py": None,
+    "fetch_pages.py": CACHE_SKILLS,
+}
 
 
 def skill_dirs():
@@ -33,11 +50,13 @@ def main():
     check = "--check" in sys.argv
     drift = []
     copied = 0
-    for fname in SHARED:
+    for fname, targets in SHARED.items():
         canonical = os.path.join(REPO_ROOT, "tools", fname)
         with open(canonical, "rb") as f:
             want = f.read()
         for name, path in skill_dirs():
+            if targets is not None and name not in targets:
+                continue
             dest = os.path.join(path, "scripts")
             os.makedirs(dest, exist_ok=True)
             dest_file = os.path.join(dest, fname)

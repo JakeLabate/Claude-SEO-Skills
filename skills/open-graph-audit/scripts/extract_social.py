@@ -110,6 +110,29 @@ def empty(status, final_url):
             "canonical": None, "meta_robots": None}
 
 
+def extract_from_cache(cache_path):
+    """Pure: turn a shared page cache (from fetch_pages.py) into a social inventory.
+
+    No network — parses the cached HTML for exactly the fields this audit needs.
+    (The optional share-image probe still hits the network unless --no-probe.)
+    """
+    with open(cache_path, encoding="utf-8") as f:
+        cache = json.load(f)
+    pages = {}
+    for url, page in cache.get("pages", {}).items():
+        html = page.get("html")
+        status = page.get("status", 0)
+        final_url = page.get("final_url") or url
+        if not html:
+            pages[url] = empty(status, final_url)
+            continue
+        info, _links = parse_page(final_url, html)
+        info["status"] = status
+        info["final_url"] = final_url
+        pages[url] = info
+    return cache.get("site", cache_path), pages
+
+
 def collect(urls, max_pages, crawl_host=None):
     pages, queue, seen = {}, deque(urls), set(urls)
     while queue and len(pages) < max_pages:
@@ -152,25 +175,32 @@ def probe_images(pages):
 
 def main():
     ap = argparse.ArgumentParser(description="Build an Open Graph / Twitter Card inventory.")
-    ap.add_argument("source")
+    ap.add_argument("source", nargs="?")
+    ap.add_argument("--from-cache",
+                    help="Extract from a shared page cache produced by fetch_pages.py (no network)")
     ap.add_argument("--max-pages", type=int, default=500)
     ap.add_argument("--output", default="social_inventory.json")
     ap.add_argument("--url-list", action="store_true")
     ap.add_argument("--no-probe", action="store_true", help="skip probing share images")
     args = ap.parse_args()
 
-    if args.url_list:
+    if args.from_cache:
+        site, pages = extract_from_cache(args.from_cache)
+    elif not args.source:
+        ap.error("provide a source, or --from-cache page_cache.json")
+    elif args.url_list:
         with open(args.source, encoding="utf-8") as f:
             urls = [l.strip() for l in f if l.strip() and not l.startswith("#")]
-        pages = collect(urls[: args.max_pages], args.max_pages)
+        site, pages = args.source, collect(urls[: args.max_pages], args.max_pages)
     else:
         start = args.source.rstrip("/")
         seeds = pages_from_sitemap(start) or [start]
-        pages = collect(seeds[: args.max_pages], args.max_pages, crawl_host=norm_host(start))
+        site, pages = args.source, collect(seeds[: args.max_pages], args.max_pages,
+                                           crawl_host=norm_host(start))
 
     images = {} if args.no_probe else probe_images(pages)
     with open(args.output, "w", encoding="utf-8") as f:
-        json.dump({"site": args.source, "pages": pages, "images": images},
+        json.dump({"site": site, "pages": pages, "images": images},
                   f, indent=2, ensure_ascii=False)
     print(f"Wrote {len(pages)} pages, {len(images)} share images to {args.output}",
           file=sys.stderr)
