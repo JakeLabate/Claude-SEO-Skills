@@ -76,7 +76,7 @@ framed as template-level fixes, and a prioritized action list.
 - **?page=1 duplicate:** serve page 1 at the bare URL and 301 `?page=1` to it.
 - Frame fixes at the template level; base everything on observed data.
 
-## Optional: export the report as a Word document
+## Optional: export the report as a Word document or CSV
 
 If the user wants the findings as a `.docx` (for example, to share with stakeholders or attach to a ticket), save the Markdown report to a file and convert it:
 
@@ -86,9 +86,18 @@ python3 scripts/md_to_docx.py report.md --output report.docx
 
 `scripts/md_to_docx.py` uses only the Python standard library (no `pip install`) and renders headings, tables, lists, links, bold/italic, and code blocks. Offer this whenever a user asks for a Word doc, a `.docx`, or a shareable/downloadable report.
 
+To hand the findings back as a spreadsheet instead, flatten the audit JSON to a CSV — one row per finding, with its severity:
+
+```bash
+python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
+```
+
+`scripts/findings_to_csv.py` is standard-library only too. Offer it whenever a user asks for a CSV, a spreadsheet, or the full list of findings.
+
 ## Resources
 
 - `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py` — flatten the audit report JSON into a flat findings.csv (standard library only)
 - `references/audit-checks.md` — full definitions and rationale
 - `references/report-template.md` — report output structure
 - `scripts/extract_pagination.py` — crawl and inventory pagination signals

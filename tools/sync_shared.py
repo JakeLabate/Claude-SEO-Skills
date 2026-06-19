@@ -7,8 +7,9 @@ skill's scripts/ folder. tools/ holds the canonical copy; this script stamps it
 into every skill. tools/validate_skills.py fails CI if any copy drifts.
 
 Shared scripts and their targets:
-  - md_to_docx.py  (Markdown report -> Word .docx converter) -> every skill
-  - fetch_pages.py (crawl once -> shared page cache)          -> crawl-based skills
+  - md_to_docx.py      (Markdown report -> Word .docx converter)  -> every skill
+  - findings_to_csv.py (audit_report.json -> flat findings.csv)   -> every skill
+  - fetch_pages.py     (crawl once -> shared page cache)          -> crawl-based skills
     that read the cache via `--from-cache`, plus the full-seo-audit orchestrator.
 
 Usage:
@@ -35,6 +36,7 @@ CACHE_SKILLS = {
 # filename -> set of target skill names, or None meaning "every skill".
 SHARED = {
     "md_to_docx.py": None,
+    "findings_to_csv.py": None,
     "fetch_pages.py": CACHE_SKILLS,
 }
 

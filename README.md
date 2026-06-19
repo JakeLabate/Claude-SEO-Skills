@@ -36,7 +36,7 @@ skill-name/
 
 All skills share one pipeline — **fetch → extract → audit → report** — and a four-level severity model (High / Medium / Low / Info). The page-based audits crawl the site **once** into a shared `page_cache.json` (via `fetch_pages.py`) and each extractor reads from it with `--from-cache`, so a full audit fetches once instead of crawling per area; each extractor also keeps a standalone mode (live URL, `--local`, `--url-list`). See [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md) for the full design and a guide to adding your own skill.
 
-## Export reports to Word (.docx)
+## Export reports to Word (.docx) or CSV
 
 Every skill can hand back its report as a Word document, not just Markdown. Ask for "a Word doc", "a `.docx`", or "a shareable report" and the skill writes the report and converts it with its bundled `scripts/md_to_docx.py`:
 
@@ -45,6 +45,14 @@ python3 scripts/md_to_docx.py report.md --output report.docx
 ```
 
 Like everything else here, the converter is **standard-library only** — a `.docx` is just a ZIP of OOXML, so no `pip install` is needed. It renders headings, tables, lists, links, bold/italic, and code blocks. The export happens after the report is written, so the `.docx` keeps the prioritized fixes and rewritten values Claude produced — it's the report reformatted, not a raw dump of the findings JSON.
+
+Need the findings in a spreadsheet instead? Ask for "a CSV" and the skill flattens the auditor's JSON into one row per finding — severity resolved, ready to filter and sort — with its bundled `scripts/findings_to_csv.py`:
+
+```bash
+python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
+```
+
+It's standard-library only too (Python's `csv` module), and it reads both a single skill's `audit_report.json` and the `full-seo-audit` orchestrator's `consolidated_report.json`.
 
 ## Run everything at once
 

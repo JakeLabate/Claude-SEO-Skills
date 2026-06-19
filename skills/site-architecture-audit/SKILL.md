@@ -93,7 +93,7 @@ For each issue, give a concrete, copy-pasteable recommendation, e.g.:
 - Lowercase and de-underscore `/Services/SEO_Audit` to `/services/seo-audit` and 301 the old URL
 - Add the 60 indexable pages listed below to `sitemap.xml` and reference the sitemap from robots.txt
 
-## Optional: export the report as a Word document
+## Optional: export the report as a Word document or CSV
 
 If the user wants the findings as a `.docx` (for example, to share with stakeholders or attach to a ticket), save the Markdown report to a file and convert it:
 
@@ -103,9 +103,18 @@ python3 scripts/md_to_docx.py report.md --output report.docx
 
 `scripts/md_to_docx.py` uses only the Python standard library (no `pip install`) and renders headings, tables, lists, links, bold/italic, and code blocks. Offer this whenever a user asks for a Word doc, a `.docx`, or a shareable/downloadable report.
 
+To hand the findings back as a spreadsheet instead, flatten the audit JSON to a CSV — one row per finding, with its severity:
+
+```bash
+python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
+```
+
+`scripts/findings_to_csv.py` is standard-library only too. Offer it whenever a user asks for a CSV, a spreadsheet, or the full list of findings.
+
 ## Resources
 
 - `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py` — flatten the audit report JSON into a flat findings.csv (standard library only)
 - `references/audit-checks.md` : full definitions, thresholds, and rationale for every audit check
 - `references/report-template.md` : report output structure
 - `scripts/crawl_architecture.py` : crawl the site, probe host variants, parse robots.txt and sitemaps, build the inventory

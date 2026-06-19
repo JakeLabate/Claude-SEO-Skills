@@ -29,9 +29,9 @@ it**. This is the single most important idea in the repo.
                 ▼
          a human-readable Markdown report with prioritized fixes
                 │
-            export (optional — scripts/md_to_docx.py)
+            export (optional — scripts/md_to_docx.py, scripts/findings_to_csv.py)
                 ▼
-         the same report as a Word .docx, for sharing
+         the same report as a Word .docx, or the findings as a flat .csv
 ```
 
 **Fetch is split out from extract** so a site is crawled a single time and every
@@ -70,7 +70,8 @@ skill-name/
     ├── fetch_pages.py                # shared: crawl once → page_cache.json (crawl skills)
     ├── extract_*.py / collect_*.py   # the extractor → inventory.json (reads --from-cache)
     ├── audit_*.py                    # the auditor → audit_report.json
-    └── md_to_docx.py                 # shared: render the report as a .docx
+    ├── md_to_docx.py                 # shared: render the report as a .docx
+    └── findings_to_csv.py            # shared: flatten audit_report.json → findings.csv
 ```
 
 ### `SKILL.md`
@@ -136,7 +137,7 @@ deliberate constraint:
 If you add a skill, keep this guarantee. If a check truly cannot be done with the
 stdlib, make the dependency optional and degrade gracefully.
 
-## Exporting the report as a .docx
+## Exporting the report as a .docx or .csv
 
 The reporting step produces Markdown. When a user wants a shareable Word
 document, `scripts/md_to_docx.py` converts that Markdown into a `.docx`:
@@ -153,14 +154,31 @@ degrades to plain text rather than failing. The conversion runs *after* the
 report so Claude's judgment (prioritized fixes, rewritten titles) is preserved —
 the `.docx` is the report, reformatted, not a re-derivation from the JSON.
 
+When a user wants the findings in a spreadsheet, `scripts/findings_to_csv.py`
+flattens the auditor's JSON into one row per finding instead:
+
+```bash
+python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
+```
+
+It uses only Python's `csv` module. Each row carries the finding's `severity`
+(resolved from the report's `severity` map) and `check`, followed by that
+finding's own fields, with rows ordered High → Medium → Low → Info so the sheet
+leads with what matters. It reads both a single skill's `audit_report.json` and
+the `full-seo-audit` orchestrator's `consolidated_report.json` (whose
+`checks_ranked` list becomes one row per ranked check). Unlike the `.docx`,
+which mirrors Claude's written report, the CSV is derived straight from the
+findings JSON — it's the raw inventory of issues, for triage and tracking.
+
 ## Shared scripts (and how they stay in sync)
 
-Two scripts are shared across skills and must be byte-identical everywhere they
+A few scripts are shared across skills and must be byte-identical everywhere they
 appear. They have to be: the installer (`bin/cli.js`) copies skill folders
 **individually**, so a script in `tools/` alone would not exist for someone who
 installs just one skill. Skills are self-contained.
 
 - `md_to_docx.py` — the Markdown→.docx converter — goes into **every** skill.
+- `findings_to_csv.py` — the audit-JSON→.csv flattener — goes into **every** skill.
 - `fetch_pages.py` — the shared crawl-once fetch stage — goes into the
   **crawl-based** skills that read its cache via `--from-cache`, plus the
   `full-seo-audit` orchestrator that runs it once.
@@ -200,6 +218,6 @@ These patterns recur in every collector and are worth copying verbatim:
 4. Add the skill to the table in `README.md`. (The CLI and npm package pick it
    up automatically — `bin/cli.js` scans `skills/` for a `SKILL.md`, and
    `package.json` ships the whole `skills/` folder.)
-5. Run `python3 tools/sync_shared.py` to drop the shared `md_to_docx.py` into the
-   new skill's `scripts/`.
+5. Run `python3 tools/sync_shared.py` to drop the shared scripts
+   (`md_to_docx.py`, `findings_to_csv.py`) into the new skill's `scripts/`.
 6. Run `python3 tools/validate_skills.py` until it passes.
