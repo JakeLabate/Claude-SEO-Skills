@@ -29,7 +29,9 @@ skill-name/
 └── scripts/
     ├── fetch_pages.py                # shared: crawl once → page_cache.json (crawl skills)
     ├── extract_*.py / collect_*.py   # the extractor → inventory.json (reads --from-cache)
-    └── audit_*.py                    # the auditor → audit_report.json
+    ├── audit_*.py                    # the auditor → audit_report.json
+    ├── md_to_docx.py                 # shared: render the report as a .docx
+    └── findings_to_csv.py            # shared: flatten audit_report.json → findings.csv
 ```
 
 All skills share one pipeline — **fetch → extract → audit → report** — and a four-level severity model (High / Medium / Low / Info). The page-based audits crawl the site **once** into a shared `page_cache.json` (via `fetch_pages.py`) and each extractor reads from it with `--from-cache`, so a full audit fetches once instead of crawling per area; each extractor also keeps a standalone mode (live URL, `--local`, `--url-list`). See [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md) for the full design and a guide to adding your own skill.
