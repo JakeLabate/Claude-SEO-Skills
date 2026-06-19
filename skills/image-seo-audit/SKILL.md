@@ -39,6 +39,9 @@ Use `scripts/extract_images.py` to build an image inventory:
 
 ```bash
 python3 scripts/extract_images.py https://example.com --max-pages 500 --check-files --output image_inventory.json
+# already crawled once (e.g. in a full SEO audit)? skip the crawl and reuse the shared cache:
+# python3 scripts/fetch_pages.py https://example.com --output page_cache.json
+# python3 scripts/extract_images.py --from-cache page_cache.json --check-files --output image_inventory.json
 ```
 
 For every `<img>` the inventory records: absolute `src`, `alt` (null if the attribute is absent vs. empty string if `alt=""`), `width`/`height` attributes, `loading`, whether it has a `srcset`, whether it sits inside a `<picture>`, and its position in the page. With `--check-files`, each unique image URL is HEAD-requested to record HTTP status, content type, and byte size.
