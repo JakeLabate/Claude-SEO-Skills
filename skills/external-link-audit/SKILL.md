@@ -38,6 +38,9 @@ Use `scripts/extract_external_links.py` to crawl the site and collect every exte
 
 ```bash
 python3 scripts/extract_external_links.py https://example.com --max-pages 500 --max-depth 5 --output external_links.json
+# already crawled once (e.g. in a full SEO audit)? skip the crawl and reuse the shared cache:
+# python3 scripts/fetch_pages.py https://example.com --output page_cache.json
+# python3 scripts/extract_external_links.py --from-cache page_cache.json --output external_links.json
 ```
 
 For every external link, the inventory records: source page, target URL, target domain, anchor text, `rel` attributes, `target` attribute, and whether the link is in `<nav>`/`<footer>` or in main content.

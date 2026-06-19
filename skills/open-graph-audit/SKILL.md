@@ -33,6 +33,9 @@ Use `scripts/extract_social.py`:
 
 ```bash
 python3 scripts/extract_social.py https://example.com --max-pages 500 --output social_inventory.json
+# already crawled once (e.g. in a full SEO audit)? skip the crawl and reuse the shared cache:
+# python3 scripts/fetch_pages.py https://example.com --output page_cache.json
+# python3 scripts/extract_social.py --from-cache page_cache.json --output social_inventory.json
 ```
 
 It records each page's OG and Twitter Card tags, canonical, and meta robots, then

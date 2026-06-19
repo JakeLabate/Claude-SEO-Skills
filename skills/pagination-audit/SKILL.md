@@ -32,6 +32,9 @@ Use `scripts/extract_pagination.py`:
 
 ```bash
 python3 scripts/extract_pagination.py https://example.com --max-pages 500 --output pagination_inventory.json
+# already crawled once (e.g. in a full SEO audit)? skip the crawl and reuse the shared cache:
+# python3 scripts/fetch_pages.py https://example.com --output page_cache.json
+# python3 scripts/extract_pagination.py --from-cache page_cache.json --output pagination_inventory.json
 ```
 
 It records each page's canonical, meta robots, `rel="next"`/`rel="prev"` targets,

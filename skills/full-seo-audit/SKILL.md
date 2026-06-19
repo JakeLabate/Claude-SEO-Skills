@@ -58,27 +58,43 @@ Each row is a separate skill. Run the ones in scope.
 
 ## Workflow
 
-### Step 1: Run each in-scope audit
+### Step 1: Crawl once into a shared page cache
 
-For each area in scope, run that skill's collect script and then its audit
-script, following the skill's own `SKILL.md`. Save each audit output to a shared
-folder using a stable, skill-named filename so they can be merged:
+The page-based audits all read the same HTML, so crawl the site a **single**
+time with the shared fetch stage and let every extractor read from that cache:
 
 ```bash
 mkdir -p audits
-# example for two areas — repeat per in-scope skill
-python3 ../sitemap-audit/scripts/collect_sitemap.py https://example.com --output audits/sitemap.inventory.json
-python3 ../sitemap-audit/scripts/audit_sitemap.py audits/sitemap.inventory.json --output audits/sitemap-audit.audit_report.json
-
-python3 ../meta-data-audit/scripts/extract_metadata.py https://example.com --output audits/meta.inventory.json
-python3 ../meta-data-audit/scripts/audit_metadata.py audits/meta.inventory.json --output audits/meta-data-audit.audit_report.json
+python3 scripts/fetch_pages.py https://example.com --max-pages 200 --output audits/page_cache.json
 ```
 
-To avoid crawling the site many times, reuse one crawl where skills accept a
-shared inventory or a `--url-list`; otherwise cap `--max-pages` to keep total
-requests reasonable.
+### Step 2: Extract + audit each in-scope area
 
-### Step 2: Consolidate
+For each page-based area in scope, run its extractor with `--from-cache` (pure,
+no extra crawl) then its audit script. Save each audit output to the shared
+folder using a stable, skill-named filename so they can be merged:
+
+```bash
+# repeat per in-scope page-based skill — all read the ONE page_cache.json
+python3 ../meta-data-audit/scripts/extract_metadata.py --from-cache audits/page_cache.json --output audits/meta.inventory.json
+python3 ../meta-data-audit/scripts/audit_metadata.py audits/meta.inventory.json --output audits/meta-data-audit.audit_report.json
+
+python3 ../heading-structure-audit/scripts/extract_headings.py --from-cache audits/page_cache.json --output audits/head.inventory.json
+python3 ../heading-structure-audit/scripts/audit_headings.py audits/head.inventory.json --output audits/heading-structure-audit.audit_report.json
+```
+
+The skills that read `--from-cache` are: meta-data, heading-structure,
+image-seo, schema-markup, open-graph, content-quality, keyword-cannibalization,
+mixed-content, canonical-tag, pagination, soft-404, and external-link. (A few
+also run a small secondary probe — canonical targets, share images, the soft-404
+missing-page probe — on top of the cached crawl.)
+
+The non-page audits fetch their own thing and don't use the page cache: run them
+per their own `SKILL.md` — `sitemap-audit`, `robots-txt-audit`, `llms-txt-audit`,
+`redirect-audit`, `core-web-vitals-audit`, plus `internal-link-audit` and
+`site-architecture-audit` (which crawl with depth tracking of their own).
+
+### Step 3: Consolidate
 
 Merge every `*.audit_report.json` into one cross-skill view:
 
@@ -89,7 +105,7 @@ python3 scripts/consolidate_reports.py --dir audits --output consolidated_report
 The consolidator emits total issues by severity, a per-skill breakdown, and a
 flat list of every failing check ranked by severity then count.
 
-### Step 3: Produce the consolidated report
+### Step 4: Produce the consolidated report
 
 Write the report following `references/report-template.md`:
 
@@ -101,7 +117,7 @@ Write the report following `references/report-template.md`:
 4. **Prioritized roadmap** — a single cross-area action list ordered by impact,
    not by area.
 
-### Step 4: Prioritize across areas
+### Step 5: Prioritize across areas
 
 Rank fixes by impact, not by which skill found them. Apply this order:
 

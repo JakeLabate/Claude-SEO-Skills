@@ -38,6 +38,9 @@ Use `scripts/extract_headings.py` to build a heading inventory:
 
 ```bash
 python3 scripts/extract_headings.py https://example.com --max-pages 500 --output heading_inventory.json
+# already crawled once (e.g. in a full SEO audit)? skip the crawl and reuse the shared cache:
+# python3 scripts/fetch_pages.py https://example.com --output page_cache.json
+# python3 scripts/extract_headings.py --from-cache page_cache.json --output heading_inventory.json
 ```
 
 For every page the inventory records the `<title>` and the full list of headings in document order, each with its level (1–6) and trimmed text.

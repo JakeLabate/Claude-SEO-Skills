@@ -4,14 +4,19 @@ This document explains how every skill in this repository is built. If you want
 to understand how the audits work, read this first; if you want to add a skill,
 follow this pattern so it behaves like the rest.
 
-## The collect → audit → report pipeline
+## The fetch → extract → audit → report pipeline
 
 Every skill separates **gathering data** from **judging it** from **explaining
 it**. This is the single most important idea in the repo.
 
 ```
-            collect (a *.py "extract"/"collect" script)
-                │   crawls the site, fetches files, records raw facts
+            fetch (shared scripts/fetch_pages.py)
+                │   crawls the site ONCE, stores raw HTML + response facts
+                ▼
+        page_cache.json  ← a raw, audit-agnostic snapshot of what was served
+                │
+            extract (a *.py "extract"/"collect" script, --from-cache)
+                │   pure: parses the cached HTML for the fields THIS audit needs
                 ▼
         inventory.json  ← a plain, reviewable snapshot of what exists
                 │
@@ -29,11 +34,23 @@ it**. This is the single most important idea in the repo.
          the same report as a Word .docx, for sharing
 ```
 
+**Fetch is split out from extract** so a site is crawled a single time and every
+audit reads from the same `page_cache.json`. A full SEO audit then fetches once
+and extracts many times, instead of crawling the site once per area. Each
+crawl-based extractor accepts `--from-cache page_cache.json` (pure, no network)
+*and* keeps its standalone modes (a live URL, `--local`, `--url-list`) for
+single-area runs, where fetch+extract collapse back into one step.
+
+Two skills opt out of the shared cache on purpose: `internal-link-audit` and
+`site-architecture-audit` build a link graph that needs per-page crawl **depth**
+and status resolution of linked-but-uncrawled targets, which a flat page cache
+does not model. They keep their own crawler.
+
 Why split it this way:
 
-- **The collector makes the network calls; the auditor is pure.** You can re-run
-  the audit, tweak thresholds, or diff two runs without re-crawling. The auditor
-  is deterministic and easy to reason about.
+- **`fetch_pages.py` makes the network calls; extract and audit are pure.** You
+  can re-extract, re-run the audit, tweak thresholds, or diff two runs without
+  re-crawling. Extract and audit are deterministic and easy to reason about.
 - **The inventory is the source of truth.** Every finding traces back to an
   observed fact in the inventory — never to a guess. The reporting step is told,
   explicitly, to never invent URLs, prices, or claims.
@@ -50,7 +67,8 @@ skill-name/
 │   ├── audit-checks.md          # every check: definition, why it matters, fix
 │   └── report-template.md       # the exact Markdown structure of the output
 └── scripts/
-    ├── extract_*.py / collect_*.py   # the collector → inventory.json
+    ├── fetch_pages.py                # shared: crawl once → page_cache.json (crawl skills)
+    ├── extract_*.py / collect_*.py   # the extractor → inventory.json (reads --from-cache)
     ├── audit_*.py                    # the auditor → audit_report.json
     └── md_to_docx.py                 # shared: render the report as a .docx
 ```
@@ -137,15 +155,23 @@ the `.docx` is the report, reformatted, not a re-derivation from the JSON.
 
 ## Shared scripts (and how they stay in sync)
 
-`md_to_docx.py` is identical in every skill. It has to be: the installer
-(`bin/cli.js`) copies skill folders **individually**, so a script in `tools/`
-alone would not exist for someone who installs just one skill. Skills are
-self-contained.
+Two scripts are shared across skills and must be byte-identical everywhere they
+appear. They have to be: the installer (`bin/cli.js`) copies skill folders
+**individually**, so a script in `tools/` alone would not exist for someone who
+installs just one skill. Skills are self-contained.
 
-The canonical copy lives at `tools/md_to_docx.py`. `tools/sync_shared.py` stamps
-it into every `skills/*/scripts/`, and `tools/validate_skills.py` fails if any
-copy drifts. So: **edit `tools/md_to_docx.py`, then run
-`python3 tools/sync_shared.py`** — never edit a per-skill copy directly.
+- `md_to_docx.py` — the Markdown→.docx converter — goes into **every** skill.
+- `fetch_pages.py` — the shared crawl-once fetch stage — goes into the
+  **crawl-based** skills that read its cache via `--from-cache`, plus the
+  `full-seo-audit` orchestrator that runs it once.
+
+The canonical copies live in `tools/`. The manifest of which file lands in which
+skills is `SHARED` in `tools/sync_shared.py`. `tools/sync_shared.py` stamps each
+file into its target `skills/*/scripts/`, and `tools/validate_skills.py` (which
+imports that same manifest) fails if any required copy drifts or is missing. So:
+**edit `tools/<file>.py`, then run `python3 tools/sync_shared.py`** — never edit
+a per-skill copy directly. To add a skill to the page-cache set, add its name to
+`CACHE_SKILLS` in `tools/sync_shared.py` and re-run the sync.
 
 ## Shared script conventions
 

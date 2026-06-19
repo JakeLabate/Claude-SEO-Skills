@@ -36,6 +36,9 @@ Use `scripts/extract_targets.py`:
 
 ```bash
 python3 scripts/extract_targets.py https://example.com --max-pages 500 --output target_inventory.json
+# already crawled once (e.g. in a full SEO audit)? skip the crawl and reuse the shared cache:
+# python3 scripts/fetch_pages.py https://example.com --output page_cache.json
+# python3 scripts/extract_targets.py --from-cache page_cache.json --output target_inventory.json
 ```
 
 For each page it records title, H1, meta description, noindex, word count, and the

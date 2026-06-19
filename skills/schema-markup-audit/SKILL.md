@@ -40,6 +40,9 @@ Use `scripts/extract_schema.py` to fetch pages and extract all structured data (
 
 ```bash
 python3 scripts/extract_schema.py https://example.com --max-pages 200 --output schema_inventory.json
+# already crawled once (e.g. in a full SEO audit)? skip the crawl and reuse the shared cache:
+# python3 scripts/fetch_pages.py https://example.com --output page_cache.json
+# python3 scripts/extract_schema.py --from-cache page_cache.json --output schema_inventory.json
 ```
 
 For every page, record:

@@ -34,6 +34,9 @@ Use `scripts/extract_content.py`:
 
 ```bash
 python3 scripts/extract_content.py https://example.com --max-pages 500 --output content_inventory.json
+# already crawled once (e.g. in a full SEO audit)? skip the crawl and reuse the shared cache:
+# python3 scripts/fetch_pages.py https://example.com --output page_cache.json
+# python3 scripts/extract_content.py --from-cache page_cache.json --output content_inventory.json
 ```
 
 For each page it records visible word count, text-to-HTML ratio, title, H1,

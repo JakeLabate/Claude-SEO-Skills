@@ -114,26 +114,36 @@ def validate_skill(name, errors, warnings):
 
 
 def check_shared_scripts(skills, errors):
-    """Each skill ships its own copy of md_to_docx.py (skills are self-contained,
-    and the installer copies folders individually). Assert every copy is
-    byte-identical to the canonical tools/md_to_docx.py so they never drift."""
-    canonical = os.path.join(REPO_ROOT, "tools", "md_to_docx.py")
-    if not os.path.isfile(canonical):
-        errors.append("tools/md_to_docx.py is missing (canonical .docx converter)")
+    """Shared scripts are stamped into each target skill (skills are self-contained,
+    and the installer copies folders individually). Assert every required copy is
+    byte-identical to its canonical tools/<file> so they never drift. The manifest
+    of which file goes into which skills lives in tools/sync_shared.py."""
+    sys.path.insert(0, os.path.join(REPO_ROOT, "tools"))
+    try:
+        from sync_shared import SHARED  # filename -> set of skills, or None = all
+    except Exception as e:  # pragma: no cover - defensive
+        errors.append(f"could not import shared-script manifest from tools/sync_shared.py: {e}")
         return
-    with open(canonical, "rb") as f:
-        want = f.read()
-    for name in skills:
-        copy = os.path.join(SKILLS_DIR, name, "scripts", "md_to_docx.py")
-        if not os.path.isfile(copy):
-            errors.append(f"{name}: missing scripts/md_to_docx.py (run tools/sync_shared.py)")
+    for fname, targets in SHARED.items():
+        canonical = os.path.join(REPO_ROOT, "tools", fname)
+        if not os.path.isfile(canonical):
+            errors.append(f"tools/{fname} is missing (canonical shared script)")
             continue
-        with open(copy, "rb") as f:
-            if f.read() != want:
-                errors.append(
-                    f"{name}/scripts/md_to_docx.py differs from tools/md_to_docx.py "
-                    "(run tools/sync_shared.py)"
-                )
+        with open(canonical, "rb") as f:
+            want = f.read()
+        for name in skills:
+            if targets is not None and name not in targets:
+                continue
+            copy = os.path.join(SKILLS_DIR, name, "scripts", fname)
+            if not os.path.isfile(copy):
+                errors.append(f"{name}: missing scripts/{fname} (run tools/sync_shared.py)")
+                continue
+            with open(copy, "rb") as f:
+                if f.read() != want:
+                    errors.append(
+                        f"{name}/scripts/{fname} differs from tools/{fname} "
+                        "(run tools/sync_shared.py)"
+                    )
 
 
 def compile_all_python(errors):
