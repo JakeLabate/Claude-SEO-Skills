@@ -10,7 +10,8 @@ an audit_report.json with the same top-level shape:
 
 This tool reads that file and writes one row per finding, with `check` and
 `severity` columns prepended so the whole report is sortable and filterable in
-a spreadsheet. Columns are the union of every finding's fields, in first-seen
+a spreadsheet. Rows are emitted most-severe-first (high -> medium -> low ->
+info). Columns are the union of every finding's fields, in first-seen
 order. List-valued fields (e.g. the pages sharing a duplicate title) are joined
 with "; "; dict-valued fields are JSON-encoded so nothing is silently dropped.
 
@@ -30,6 +31,19 @@ import argparse
 import csv
 import json
 import sys
+
+
+# Highest severity first; anything unrecognized sorts after these (but before
+# a truly empty severity). Compared case-insensitively so "High"/"high" match.
+_SEVERITY_RANK = {"high": 0, "medium": 1, "low": 2, "info": 3}
+
+
+def _severity_key(severity):
+    """Sort key putting the most severe findings first, unknown ones last."""
+    text = str(severity or "").strip().lower()
+    if not text:
+        return (2, 0)
+    return (1, _SEVERITY_RANK.get(text, len(_SEVERITY_RANK)))
 
 
 def _stringify(value):
@@ -79,6 +93,9 @@ def flatten(report):
                     field_order.append(key)
                 row[key] = _stringify(value)
             rows.append(row)
+
+    # Most severe findings first; ties keep first-seen order (sort is stable).
+    rows.sort(key=lambda row: _severity_key(row.get("severity")))
 
     fieldnames = ["check", "severity"] + field_order
     return fieldnames, rows
