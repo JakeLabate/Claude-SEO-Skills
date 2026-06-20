@@ -5,6 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/claude-seo-skills.svg)](https://www.npmjs.com/package/claude-seo-skills)
 [![CI](https://github.com/JakeLabate/Claude-SEO-Skills/actions/workflows/ci.yml/badge.svg)](https://github.com/JakeLabate/Claude-SEO-Skills/actions/workflows/ci.yml)
 [![license](https://img.shields.io/npm/l/claude-seo-skills.svg)](LICENSE)
+[![Claude Skill](https://img.shields.io/badge/Claude-Skill-D97757?logo=claude&logoColor=white)](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview)
 
 A collection of [Claude skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) for SEO tasks. Each folder under [`skills/`](skills/) is a self-contained, fully functional Claude skill.
 
