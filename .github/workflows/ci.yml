@@ -35,6 +35,20 @@ jobs:
           m.parseString(z.read("word/document.xml"))  # well-formed XML
           print("docx OK")
           PY
+      - name: Smoke-test the findings -> .csv flattener
+        run: |
+          printf '{"severity":{"low_check":"Low","missing_title":"High"},"findings":{"low_check":[{"page":"https://example.com/b"}],"missing_title":[{"page":"https://example.com/a"}]}}' > /tmp/ar.json
+          python3 tools/findings_to_csv.py /tmp/ar.json -o /tmp/findings.csv
+          python3 - <<'PY'
+          import csv
+          with open("/tmp/findings.csv", newline="") as f:
+              rows = list(csv.DictReader(f))
+          assert len(rows) == 2, rows
+          # High sorts before Low, and severity/check/page columns are populated.
+          assert rows[0]["severity"] == "High" and rows[0]["check"] == "missing_title", rows
+          assert rows[0]["page"] == "https://example.com/a", rows
+          print("csv OK")
+          PY
 
   cli:
     name: CLI smoke test (Node ${{ matrix.node-version }})
