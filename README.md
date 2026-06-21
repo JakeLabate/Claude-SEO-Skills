@@ -1,6 +1,6 @@
 # Claude-SEO-Skills
 
-<img src="image.gif" width="100%" alt="Claude SEO Skills by Jake Labate, SEO Professional">
+<img src="https://raw.githubusercontent.com/JakeLabate/Claude-SEO-Skills/main/image.gif" width="100%" alt="Claude SEO Skills by Jake Labate, SEO Professional">
 
 [![npm version](https://img.shields.io/npm/v/claude-seo-skills.svg)](https://www.npmjs.com/package/claude-seo-skills)
 [![CI](https://github.com/JakeLabate/Claude-SEO-Skills/actions/workflows/ci.yml/badge.svg)](https://github.com/JakeLabate/Claude-SEO-Skills/actions/workflows/ci.yml)
