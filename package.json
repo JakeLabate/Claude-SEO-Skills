@@ -1,6 +1,6 @@
 {
   "name": "claude-seo-skills",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A collection of Claude Agent Skills for SEO audits (Core Web Vitals, sitemaps, robots.txt, schema, links, headings, images, redirects, metadata, and more), with a CLI to install them into your Claude skills directory.",
   "bin": {
     "claude-seo-skills": "bin/cli.js"
