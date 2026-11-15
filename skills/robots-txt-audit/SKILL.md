@@ -22,10 +22,10 @@ Use this skill when the user asks to:
 
 Before starting, confirm with the user:
 
-1. **Site URL or robots.txt URL** — a live site root (e.g., `https://example.com`, which fetches `/robots.txt`) or a specific robots.txt URL (`--robots`).
-2. **Resource check** — whether to fetch the homepage and test its CSS/JS/image references against the rules (default on). Use `--no-resources` to skip it.
+1. **Site URL or robots.txt URL**: a live site root (e.g., `https://example.com`, which fetches `/robots.txt`) or a specific robots.txt URL (`--robots`).
+2. **Resource check**: whether to fetch the homepage and test its CSS/JS/image references against the rules (default on). Use `--no-resources` to skip it.
 
-> **What robots.txt does and does not do:** robots.txt controls *crawling*, not *indexing*. A `Disallow` stops compliant crawlers from fetching a page, but a blocked URL can still be indexed (without a snippet) if other pages link to it. To keep a page out of the index, allow crawling and use a `noindex` meta tag or `X-Robots-Tag` header instead — `noindex` inside robots.txt is unsupported and ignored. Most checks here protect crawl access and rendering rather than indexing.
+> **What robots.txt does and does not do:** robots.txt controls *crawling*, not *indexing*. A `Disallow` stops compliant crawlers from fetching a page, but a blocked URL can still be indexed (without a snippet) if other pages link to it. To keep a page out of the index, allow crawling and use a `noindex` meta tag or `X-Robots-Tag` header instead: `noindex` inside robots.txt is unsupported and ignored. Most checks here protect crawl access and rendering rather than indexing.
 
 ## Workflow
 
@@ -79,10 +79,10 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — fetch status, group count, sitemaps declared, issue counts by severity
-2. **Fetch & file** — status, content type, size, redirect/HTML/BOM flags
-3. **Issues** — one section per failing check, with the offending directive/line and the fix
-4. **Prioritized action list** — ordered by severity and impact
+1. **Summary**: fetch status, group count, sitemaps declared, issue counts by severity
+2. **Fetch & file**: status, content type, size, redirect/HTML/BOM flags
+3. **Issues**: one section per failing check, with the offending directive/line and the fix
+4. **Prioritized action list**: ordered by severity and impact
 
 ### Step 5: Recommend fixes
 
@@ -90,10 +90,10 @@ For each issue, give a concrete fix:
 
 - **5xx / redirect / HTML:** serve robots.txt from the root path as `text/plain` returning `200` directly (no redirect, no HTML error page). A persistent 5xx will pause crawling site-wide.
 - **Sitewide `Disallow: /`:** confirm it is intentional (it usually is not on a production site) and remove or scope it; this single line can deindex an entire domain.
-- **Syntax errors:** fix malformed lines — every directive needs `field: value`, and `Disallow`/`Allow` must follow a `User-agent` line.
+- **Syntax errors:** fix malformed lines: every directive needs `field: value`, and `Disallow`/`Allow` must follow a `User-agent` line.
 - **Blocked resources:** add `Allow:` rules (or remove the `Disallow`) so Googlebot can fetch the CSS/JS it needs to render the page.
 - **Sitemap directive:** add an absolute `Sitemap:` line for each sitemap (or the index); fix any that 404.
-- **Unsupported directives:** remove `noindex`/`nofollow` from robots.txt and enforce them via meta robots or `X-Robots-Tag`; drop `crawl-delay` (Google ignores it — set the rate in Search Console if needed).
+- **Unsupported directives:** remove `noindex`/`nofollow` from robots.txt and enforce them via meta robots or `X-Robots-Tag`; drop `crawl-delay` (Google ignores it; set the rate in Search Console if needed).
 - Base every recommendation on the observed file; quote the exact line to change and do not invent rules.
 
 ## Optional: export the report
@@ -116,13 +116,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, thresholds, and rationale for every audit check
-- `references/report-template.md` — report output structure
-- `scripts/collect_robots.py` — fetch, parse, and probe a site's robots.txt
-- `scripts/audit_robots.py` — run audit checks against a robots.txt inventory JSON file
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, thresholds, and rationale for every audit check
+- `references/report-template.md`: report output structure
+- `scripts/collect_robots.py`: fetch, parse, and probe a site's robots.txt
+- `scripts/audit_robots.py`: run audit checks against a robots.txt inventory JSON file

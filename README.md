@@ -9,14 +9,14 @@
 
 A collection of [Claude skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) for SEO tasks. Each folder under [`skills/`](skills/) is a self-contained, fully functional Claude skill.
 
-Each skill performs a real technical-SEO audit — crawling a site (or scanning local HTML), checking it against documented rules, and producing a prioritized, paste-ready report. They're built to be **read and learned from** as much as run: the rationale behind every check lives in each skill's `references/audit-checks.md`.
+Each skill performs a real technical-SEO audit, crawling a site (or scanning local HTML), checking it against documented rules, and producing a prioritized, paste-ready report. They're built to be **read and learned from** as much as run: the rationale behind every check lives in each skill's `references/audit-checks.md`.
 
-- **See what they produce:** [`examples/`](examples/) — illustrative sample reports.
-- **Understand how they work:** [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md) — the design behind every skill.
+- **See what they produce:** [`examples/`](examples/): illustrative sample reports.
+- **Understand how they work:** [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md): the design behind every skill.
 
 ## Requirements
 
-- **Python 3.8+** to run the audit scripts. **No `pip install` required** — every script uses only the Python standard library. (The one optional dependency, `brotli`, is used if present and skipped if not.)
+- **Python 3.8+** to run the audit scripts. **No `pip install` required**: every script uses only the Python standard library. (The one optional dependency, `brotli`, is used if present and skipped if not.)
 - **Node 16+** only if you use the `npx` installer below. Claude itself runs the skills; you don't need Node to use them once installed.
 
 ## Skill architecture
@@ -37,7 +37,7 @@ skill-name/
     └── findings_to_csv.py            # shared: flatten audit_report.json → findings.csv
 ```
 
-All skills share one pipeline — **fetch → extract → audit → report** — and a four-level severity model (High / Medium / Low / Info). The page-based audits crawl the site **once** into a shared `page_cache.json` (via `fetch_pages.py`) and each extractor reads from it with `--from-cache`, so a full audit fetches once instead of crawling per area; each extractor also keeps a standalone mode (live URL, `--local`, `--url-list`). See [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md) for the full design and a guide to adding your own skill.
+All skills share one pipeline (**fetch → extract → audit → report**) and a four-level severity model (High / Medium / Low / Info). The page-based audits crawl the site **once** into a shared `page_cache.json` (via `fetch_pages.py`) and each extractor reads from it with `--from-cache`, so a full audit fetches once instead of crawling per area; each extractor also keeps a standalone mode (live URL, `--local`, `--url-list`). See [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md) for the full design and a guide to adding your own skill.
 
 ## Export reports to Word (.docx) or CSV
 
@@ -47,9 +47,9 @@ Every skill can hand back its report as a Word document, not just Markdown. Ask 
 python3 scripts/md_to_docx.py report.md --output report.docx
 ```
 
-Like everything else here, the converter is **standard-library only** — a `.docx` is just a ZIP of OOXML, so no `pip install` is needed. It renders headings, tables, lists, links, bold/italic, and code blocks. The export happens after the report is written, so the `.docx` keeps the prioritized fixes and rewritten values Claude produced — it's the report reformatted, not a raw dump of the findings JSON.
+Like everything else here, the converter is **standard-library only**: a `.docx` is just a ZIP of OOXML, so no `pip install` is needed. It renders headings, tables, lists, links, bold/italic, and code blocks. The export happens after the report is written, so the `.docx` keeps the prioritized fixes and rewritten values Claude produced: it's the report reformatted, not a raw dump of the findings JSON.
 
-When you want the **data** rather than the write-up — to filter, sort, or triage in Sheets or Excel — every skill also bundles `scripts/findings_to_csv.py`, which flattens the audit's `audit_report.json` into a CSV with one row per finding:
+When you want the **data** rather than the write-up, to filter, sort, or triage in Sheets or Excel, every skill also bundles `scripts/findings_to_csv.py`, which flattens the audit's `audit_report.json` into a CSV with one row per finding:
 
 ```bash
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
@@ -61,7 +61,7 @@ Also standard-library only. It prepends `check` and `severity` columns and joins
 
 | Skill | Description |
 |---|---|
-| [`full-seo-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/full-seo-audit) | **Orchestrator.** Runs every individual audit below and consolidates the findings into one prioritized, cross-area report — ranked by impact, not by which audit found the issue. Use for a complete / comprehensive technical-SEO review. |
+| [`full-seo-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/full-seo-audit) | **Orchestrator.** Runs every individual audit below and consolidates the findings into one prioritized, cross-area report, ranked by impact, not by which audit found the issue. Use for a complete / comprehensive technical-SEO review. |
 
 ## Available skills
 
@@ -69,12 +69,12 @@ Also standard-library only. It prepends `check` and `severity` columns and joins
 |---|---|
 | [`canonical-tag-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/canonical-tag-audit) | Audit a website's `rel="canonical"` tags: missing canonicals, multiple/conflicting canonicals, canonicals pointing at non-200/redirecting/noindexed URLs, relative or cross-host canonicals, https-to-http downgrades, and Link-header/HTML conflicts. |
 | [`content-quality-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/content-quality-audit) | Audit a website's content quality: thin content, exact-duplicate body text, near-duplicate (templated) pages via MinHash similarity, low text-to-HTML ratio, and missing H1s. |
-| [`core-web-vitals-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/core-web-vitals-audit) | Audit a website's Core Web Vitals and page-experience signals (LCP, CLS, INP, TTFB): optionally pulls real field data from Google PageSpeed Insights (CrUX), and always collects browserless lab proxies — render-blocking CSS/JS, page weight, image dimension and lazy-loading hygiene, TTFB, text compression, DOM size, request counts, and third-party origins. |
+| [`core-web-vitals-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/core-web-vitals-audit) | Audit a website's Core Web Vitals and page-experience signals (LCP, CLS, INP, TTFB): optionally pulls real field data from Google PageSpeed Insights (CrUX), and always collects browserless lab proxies: render-blocking CSS/JS, page weight, image dimension and lazy-loading hygiene, TTFB, text compression, DOM size, request counts, and third-party origins. |
 | [`external-link-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/external-link-audit) | Audit a website's external (outbound) links: broken links, redirected targets, insecure HTTP links, affiliate `rel="sponsored"` compliance, unsafe `target="_blank"` usage, and sitewide outbound link patterns. |
 | [`heading-structure-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/heading-structure-audit) | Audit a website's heading hierarchy (H1–H6): missing or multiple H1s, skipped heading levels, empty headings, headings that don't start at H1, overly long headings, and duplicate headings. |
 | [`image-seo-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/image-seo-audit) | Audit a website's images for SEO and Core Web Vitals: missing or empty alt text, missing `width`/`height` (layout shift), no lazy loading, oversized files, legacy formats, generic filenames, and broken image URLs. |
 | [`internal-link-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/internal-link-audit) | Audit a website's internal linking structure: broken links, orphan pages, redirect chains, click depth, anchor text quality, and link equity distribution. |
-| [`keyword-cannibalization-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/keyword-cannibalization-audit) | Audit a website for keyword cannibalization: pages with duplicate title targets, clusters of pages whose title/H1/keyword signatures overlap, and pages sharing the same primary keyword phrase — with a recommended page hierarchy. |
+| [`keyword-cannibalization-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/keyword-cannibalization-audit) | Audit a website for keyword cannibalization: pages with duplicate title targets, clusters of pages whose title/H1/keyword signatures overlap, and pages sharing the same primary keyword phrase, with a recommended page hierarchy. |
 | [`llms-txt-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/llms-txt-audit) | Audit a website's `/llms.txt` for AI/LLM discoverability (per llmstxt.org): a missing or HTML-served file, missing required H1 title or summary blockquote, broken/redirecting/blocked links, links missing descriptions, malformed list items, wrong-host or relative URLs, duplicate links, wrong content type, and whether a companion `/llms-full.txt` exists. |
 | [`meta-data-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/meta-data-audit) | Audit a website's title tags and meta descriptions: missing, duplicate, too-long, too-short, or multiple tags, generic or boilerplate titles, and keyword stuffing. |
 | [`mixed-content-audit`](https://github.com/JakeLabate/Claude-SEO-Skills/tree/main/skills/mixed-content-audit) | Audit an HTTPS website for mixed content: active mixed content (http scripts/styles/iframes browsers block), insecure form actions, passive mixed content (http images/media), legacy protocol-relative URLs, and pages still served over http. |

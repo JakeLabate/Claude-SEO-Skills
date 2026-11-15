@@ -20,10 +20,10 @@ Use this skill when the user asks to:
 
 ## Inputs to collect
 
-1. **Site URL or URL list** — a live site root to crawl (auto-seeds from
+1. **Site URL or URL list**: a live site root to crawl (auto-seeds from
    `/sitemap.xml`), or a text file with `--url-list`.
-2. **Scope** — pages to crawl (default 500, `--max-pages`).
-3. **Thresholds** — `--thin-words` (default 300) and `--similarity` (default
+2. **Scope**: pages to crawl (default 500, `--max-pages`).
+3. **Thresholds**: `--thin-words` (default 300) and `--similarity` (default
    0.85). Calibrate to the content type before running.
 
 ## Workflow
@@ -75,7 +75,7 @@ clusters grouped as patterns, and a prioritized action list.
   substantial unique content (cross-check `canonical-tag-audit`).
 - **Low ratio:** increase real content or trim boilerplate markup.
 - **Missing H1:** add one descriptive H1 (see `heading-structure-audit`).
-- **Always caveat JavaScript-rendered pages** — this crawler doesn't run JS, so
+- **Always caveat JavaScript-rendered pages**: this crawler doesn't run JS, so
   verify a flagged page isn't simply rendered client-side.
 - Base every recommendation on the measured signals; never invent content.
 
@@ -99,13 +99,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, thresholds, and rationale
-- `references/report-template.md` — report output structure
-- `scripts/extract_content.py` — crawl and measure content signals
-- `scripts/audit_content.py` — run content-quality audit checks
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, thresholds, and rationale
+- `references/report-template.md`: report output structure
+- `scripts/extract_content.py`: crawl and measure content signals
+- `scripts/audit_content.py`: run content-quality audit checks

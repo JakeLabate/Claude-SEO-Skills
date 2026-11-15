@@ -113,7 +113,7 @@ def empty(status, final_url):
 def extract_from_cache(cache_path):
     """Pure: turn a shared page cache (from fetch_pages.py) into a social inventory.
 
-    No network — parses the cached HTML for exactly the fields this audit needs.
+    No network: parses the cached HTML for exactly the fields this audit needs.
     (The optional share-image probe still hits the network unless --no-probe.)
     """
     with open(cache_path, encoding="utf-8") as f:

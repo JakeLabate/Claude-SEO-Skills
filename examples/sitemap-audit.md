@@ -1,6 +1,6 @@
 <!-- Illustrative sample output for the sitemap-audit skill. Fictional data. -->
 
-# Sitemap Audit — example.com
+# Sitemap Audit: example.com
 
 **Date:** 2026-06-18
 **Scope:** Discovered via `robots.txt`; followed the sitemap index; probed 1,204 listed URLs.
@@ -23,10 +23,10 @@ URLs.
 
 | Sitemap | Type | URLs | Size | Gzip | Errors |
 |---|---|---|---|---|---|
-| `/sitemap_index.xml` | index | 3 children | 0.4 KB | no | — |
-| `/sitemap-pages.xml` | urlset | 204 | 38 KB | no | — |
-| `/sitemap-products.xml` | urlset | 612 | 110 KB | no | — |
-| `/sitemap-blog.xml` | urlset | 388 | 71 KB | no | — |
+| `/sitemap_index.xml` | index | 3 children | 0.4 KB | no | - |
+| `/sitemap-pages.xml` | urlset | 204 | 38 KB | no | - |
+| `/sitemap-products.xml` | urlset | 612 | 110 KB | no | - |
+| `/sitemap-blog.xml` | urlset | 388 | 71 KB | no | - |
 
 ## High-severity issues
 
@@ -51,7 +51,7 @@ All are `http://` URLs that 301 to their `https://` equivalent.
 
 | Listed URL | Signal | Fix |
 |---|---|---|
-| `https://example.com/account/settings/` | `<meta robots noindex>` | Remove from sitemap — noindex pages don't belong |
+| `https://example.com/account/settings/` | `<meta robots noindex>` | Remove from sitemap - noindex pages don't belong |
 | … 5 more | `X-Robots-Tag: noindex` | |
 
 ## Medium-severity issues
@@ -68,8 +68,8 @@ product. Submit only the canonical URL.
 ## Low-severity issues
 
 - **Missing `lastmod` (8)** on `/sitemap-pages.xml` entries.
-- **Future `lastmod` (3)** dated 2027 — likely a timezone/serialization bug.
-- **Arbitrary `priority` (all 612 product URLs set to `1.0`)** — Google ignores
+- **Future `lastmod` (3)** dated 2027, likely a timezone/serialization bug.
+- **Arbitrary `priority` (all 612 product URLs set to `1.0`)**: Google ignores
   it; consider dropping the field.
 
 ## Prioritized action list

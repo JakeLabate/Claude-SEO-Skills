@@ -60,11 +60,11 @@ Full definitions, thresholds, and rationale for each audit check.
 
 - **Definition:** Internal links carrying `rel="nofollow"` (or `sponsored`/`ugc`).
 - **Why it matters:** Internal nofollow blocks equity flow and discovery with no benefit.
-- **Fix:** Remove `nofollow` from internal links unless there is a deliberate reason (e.g., faceted URLs you want left uncrawled — prefer robots.txt for that).
+- **Fix:** Remove `nofollow` from internal links unless there is a deliberate reason (e.g., faceted URLs you want left uncrawled: prefer robots.txt for that).
 
 ## Additional signals to note (informational)
 
-- Self-referencing links (page linking to itself) — usually harmless, note only.
-- Duplicate links (same source → same target multiple times) — only the first anchor typically counts; consolidate where practical.
-- Links using URL parameters or fragments that resolve to the same page — normalize to clean URLs.
-- HTTP links on an HTTPS site — update to HTTPS.
+- Self-referencing links (page linking to itself), usually harmless, note only.
+- Duplicate links (same source → same target multiple times): only the first anchor typically counts; consolidate where practical.
+- Links using URL parameters or fragments that resolve to the same page: normalize to clean URLs.
+- HTTP links on an HTTPS site: update to HTTPS.

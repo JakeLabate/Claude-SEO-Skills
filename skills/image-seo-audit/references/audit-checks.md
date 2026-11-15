@@ -21,7 +21,7 @@ Full definitions, thresholds, and rationale for each audit check.
 ### 3. Missing width/height
 
 - **Definition:** An `<img>` lacking a `width` and/or `height` attribute.
-- **Why it matters:** Without intrinsic dimensions the browser cannot reserve space before the image loads, causing Cumulative Layout Shift (CLS) — a Core Web Vitals metric and a ranking factor.
+- **Why it matters:** Without intrinsic dimensions the browser cannot reserve space before the image loads, causing Cumulative Layout Shift (CLS), a Core Web Vitals metric and a ranking factor.
 - **Fix:** Add `width` and `height` attributes matching the image's intrinsic aspect ratio (CSS can still scale it responsively), or set a CSS `aspect-ratio`.
 
 ### 4. Oversized file
@@ -65,6 +65,6 @@ Full definitions, thresholds, and rationale for each audit check.
 
 ## Informational (note, do not count as issues)
 
-- **Empty alt (`alt=""`)** — valid and correct for decorative images, but listed so the user can confirm each one is genuinely decorative and not an accidental empty value on a meaningful image.
-- **Duplicate alt text** — the same non-empty alt reused across three or more distinct images. Sometimes legitimate (repeated logo), but often a templating bug that applies one description to many different images.
-- **Background images in CSS** — this audit only sees `<img>` and `<picture>` elements; images set via CSS `background-image` are invisible to crawlers and to image search. Note this limitation if visual images appear missing from the inventory.
+- **Empty alt (`alt=""`)**: valid and correct for decorative images, but listed so the user can confirm each one is genuinely decorative and not an accidental empty value on a meaningful image.
+- **Duplicate alt text**: the same non-empty alt reused across three or more distinct images. Sometimes legitimate (repeated logo), but often a templating bug that applies one description to many different images.
+- **Background images in CSS**: this audit only sees `<img>` and `<picture>` elements; images set via CSS `background-image` are invisible to crawlers and to image search. Note this limitation if visual images appear missing from the inventory.

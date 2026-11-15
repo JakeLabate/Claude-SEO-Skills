@@ -65,7 +65,7 @@ Full definitions, thresholds, and rationale for each audit check.
 
 ## Additional signals to note (informational)
 
-- **Domain concentration** — if a large share of external links point to one domain, confirm it's intentional (not injected spam).
-- **Suspicious destinations** — links to parked domains, expired-domain redirects, gambling/pharma/adult sites the user didn't intend to cite; flag for manual review as possible hacked-content injection.
-- **Tracking-parameter bloat** — outbound URLs carrying long tracking query strings (`utm_*`, `fbclid`); link the clean canonical URL where practical.
-- **Linking to competitors with keyword-rich anchors** — note for the user to confirm it's intentional.
+- **Domain concentration**: if a large share of external links point to one domain, confirm it's intentional (not injected spam).
+- **Suspicious destinations**: links to parked domains, expired-domain redirects, gambling/pharma/adult sites the user didn't intend to cite; flag for manual review as possible hacked-content injection.
+- **Tracking-parameter bloat**: outbound URLs carrying long tracking query strings (`utm_*`, `fbclid`); link the clean canonical URL where practical.
+- **Linking to competitors with keyword-rich anchors**: note for the user to confirm it's intentional.

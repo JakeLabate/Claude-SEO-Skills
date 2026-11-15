@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Sitemap Audit — {site}
+# Sitemap Audit: {site}
 
 **Date:** {date}
 **Sitemaps found:** {n} | **URLs listed:** {n} | **URLs probed:** {n}
@@ -22,7 +22,7 @@ Use this structure for the final report delivered to the user.
 
 | Sitemap | Type | URLs | Size | Gzip | Error |
 |---|---|---|---|---|---|
-| /sitemap.xml | urlset | 1,240 | 210 KB | no | — |
+| /sitemap.xml | urlset | 1,240 | 210 KB | no | - |
 | ... | ... | ... | ... | ... | ... |
 
 ## High-severity issues

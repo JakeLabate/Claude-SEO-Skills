@@ -22,10 +22,10 @@ Use this skill when the user asks to:
 
 Before starting, confirm with the user:
 
-1. **Site URL or URL set** — a live site root URL (e.g., `https://example.com`), a sitemap URL (`--sitemap`), or a text file of specific URLs (`--url-list`). Sitemap and URL-list modes are best for verifying a known migration map.
-2. **Scope** — full crawl, a sitemap, or an explicit list. For a migration, supply the list of old URLs so each is checked for a clean single hop.
-3. **Crawl limits** — max pages (default 500) and max hops to follow (default 10).
-4. **Chain tolerance** — the maximum acceptable number of redirect hops before flagging (default 1; every redirect should reach its destination in a single hop).
+1. **Site URL or URL set**: a live site root URL (e.g., `https://example.com`), a sitemap URL (`--sitemap`), or a text file of specific URLs (`--url-list`). Sitemap and URL-list modes are best for verifying a known migration map.
+2. **Scope**: full crawl, a sitemap, or an explicit list. For a migration, supply the list of old URLs so each is checked for a clean single hop.
+3. **Crawl limits**: max pages (default 500) and max hops to follow (default 10).
+4. **Chain tolerance**: the maximum acceptable number of redirect hops before flagging (default 1; every redirect should reach its destination in a single hop).
 
 ## Workflow
 
@@ -78,10 +78,10 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — URLs checked, how many redirect, hop-count distribution, issue counts by severity
-2. **Hop distribution** — how many URLs resolve in 0/1/2/3+ hops
-3. **Issues** — one section per failing check, listing the source URL, the full hop-by-hop chain, and the fix
-4. **Prioritized action list** — ordered by severity and traffic impact
+1. **Summary**: URLs checked, how many redirect, hop-count distribution, issue counts by severity
+2. **Hop distribution**: how many URLs resolve in 0/1/2/3+ hops
+3. **Issues**: one section per failing check, listing the source URL, the full hop-by-hop chain, and the fix
+4. **Prioritized action list**: ordered by severity and traffic impact
 
 ### Step 5: Recommend fixes
 
@@ -92,7 +92,7 @@ For each issue, give a concrete fix:
 - **Redirects to errors:** repoint the redirect to a live, relevant page (not the homepage unless nothing better exists).
 - **Temporary redirects:** change 302/307 to 301/308 for moves intended to be permanent; keep 302/307 only for genuinely temporary cases (A/B tests, geo, maintenance).
 - **Meta/JS redirects:** replace with a server-side 301.
-- Never invent the destination — base every recommended target on the final URL the chain already reaches or on the user's migration map.
+- Never invent the destination: base every recommended target on the final URL the chain already reaches or on the user's migration map.
 
 ## Optional: export the report
 
@@ -114,13 +114,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, thresholds, and rationale for every audit check
-- `references/report-template.md` — report output structure
-- `scripts/collect_redirects.py` — resolve the full redirect chain for a crawl, sitemap, or URL list
-- `scripts/audit_redirects.py` — run audit checks against a redirect inventory JSON file
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, thresholds, and rationale for every audit check
+- `references/report-template.md`: report output structure
+- `scripts/collect_redirects.py`: resolve the full redirect chain for a crawl, sitemap, or URL list
+- `scripts/audit_redirects.py`: run audit checks against a redirect inventory JSON file

@@ -2,7 +2,7 @@
 """Copy shared scripts into every skill so each skill stays self-contained.
 
 The installer (bin/cli.js) copies skill folders individually, so a script that
-several skills rely on cannot live only in tools/ — it must exist inside each
+several skills rely on cannot live only in tools/: it must exist inside each
 skill's scripts/ folder. tools/ holds the canonical copy; this script stamps it
 into every skill. tools/validate_skills.py fails CI if any copy drifts.
 

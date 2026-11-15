@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Content Quality Audit — {site}
+# Content Quality Audit: {site}
 
 **Date:** {date}
 **Scope:** {pages crawled}
@@ -49,7 +49,7 @@ dominant problem (e.g. a large set of near-duplicate templated pages).}
 
 ## Prioritized action list
 
-1. {Highest-impact fix — usually a template-level near-duplicate cluster or a set
+1. {Highest-impact fix, usually a template-level near-duplicate cluster or a set
    of thin pages to consolidate. Name the pattern and example URLs.}
 2. ...
 
@@ -63,7 +63,7 @@ dominant problem (e.g. a large set of near-duplicate templated pages).}
   the user can judge whether "thin" is fair for their content type.
 - Group near-duplicate and thin pages into **patterns** (e.g. "120 location pages
   share one template") with a single recommended fix and example URLs.
-- Distinguish *fix the content* from *noindex it* — not every thin page should
+- Distinguish *fix the content* from *noindex it*, not every thin page should
   rank; some should simply be removed from the index.
 - Always caveat JavaScript-rendered pages.
 - Base everything on the measured signals; never invent word counts or content.

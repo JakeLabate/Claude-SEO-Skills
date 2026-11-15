@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# External Link Audit — {site}
+# External Link Audit: {site}
 
 **Date:** {date}
 **Scope:** {scope description}
@@ -55,7 +55,7 @@ Use this structure for the final report delivered to the user.
 
 ## Guidance
 
-- Every issue row must name the exact source URL, target URL, and a concrete fix — never generic advice.
+- Every issue row must name the exact source URL, target URL, and a concrete fix, never generic advice.
 - Cap tables at ~20 rows in the report body; attach or offer the full list (CSV/JSON) if larger.
 - Order the action list by severity first, then by estimated user/equity impact (sitewide and high-traffic pages first).
 - In the domain overview, sort by link count descending and flag any domain the user may not have intended to link.

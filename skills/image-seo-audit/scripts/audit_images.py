@@ -8,7 +8,7 @@ Usage:
 Checks implemented (see references/audit-checks.md):
 - missing_alt: <img> with no alt attribute at all (high)
 - broken_image: image URL returns a non-200 status (high, needs --check-files)
-- empty_alt: alt="" — valid only for decorative images, flagged for review (info)
+- empty_alt: alt="", valid only for decorative images, flagged for review (info)
 - missing_dimensions: no width and/or height attribute, risking layout shift (medium)
 - oversized_file: image larger than --max-bytes (medium, needs --check-files)
 - not_lazy_loaded: img beyond --lazy-after on the page without loading="lazy" (low)

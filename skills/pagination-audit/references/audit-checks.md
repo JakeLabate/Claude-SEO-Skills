@@ -21,7 +21,7 @@ indexing (but aren't harmful).
 ### 2. Paginated page is noindexed
 - **Definition:** A component page (page 2+) carries `noindex`.
 - **Why it matters:** `noindex` on paginated pages eventually drops them *and*
-  causes Google to crawl their outgoing links less — deep items lose discovery.
+  causes Google to crawl their outgoing links less: deep items lose discovery.
 - **Fix:** Let component pages be indexable, or ensure deep items are reachable by
   another path (e.g. the XML sitemap).
 
@@ -52,7 +52,7 @@ indexing (but aren't harmful).
 
 ## Informational (note, not counted as an issue)
 
-- **rel=next/prev present** — Google announced in 2019 it no longer uses these for
+- **rel=next/prev present**: Google announced in 2019 it no longer uses these for
   indexing. They are not harmful and other engines may use them, so keeping them
   is fine; just don't rely on them to consolidate a series. Reported so you know
   they exist and aren't a substitute for the canonical/indexability fixes above.

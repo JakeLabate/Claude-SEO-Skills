@@ -21,11 +21,11 @@ Use this skill when the user asks to:
 
 Before starting, confirm with the user:
 
-1. **Site URL or local files** — a live site root URL (e.g., `https://example.com`), a sitemap URL, a list of URLs, or a local folder of HTML files.
-2. **Scope** — full site, a specific section (e.g., `/blog/`), or a list of URLs.
-3. **Crawl limits** — max pages (default 500) for live crawls.
-4. **File checks** — whether to fetch each image to measure byte size and detect broken images (the `--check-files` flag; slower but enables the oversized-file and broken-image checks).
-5. **Size budget** — the byte threshold above which an image is "oversized" (default 200 KB).
+1. **Site URL or local files**: a live site root URL (e.g., `https://example.com`), a sitemap URL, a list of URLs, or a local folder of HTML files.
+2. **Scope**: full site, a specific section (e.g., `/blog/`), or a list of URLs.
+3. **Crawl limits**: max pages (default 500) for live crawls.
+4. **File checks**: whether to fetch each image to measure byte size and detect broken images (the `--check-files` flag; slower but enables the oversized-file and broken-image checks).
+5. **Size budget**: the byte threshold above which an image is "oversized" (default 200 KB).
 
 ## Workflow
 
@@ -71,23 +71,23 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 | Generic filename | Low |
 | Alt text too long (> 125 chars) | Low |
 | Redundant alt prefix ("image of…") | Low |
-| Empty `alt=""` (decorative — confirm intent) | Informational |
+| Empty `alt=""` (decorative: confirm intent) | Informational |
 | Duplicate alt reused across many images | Informational |
 
 ### Step 4: Produce the report
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — pages crawled, images found, alt-text coverage %, issue counts by severity
-2. **Issues** — one section per failing check, listing the page, the image, and a specific fix
-3. **Prioritized action list** — ordered by severity and estimated impact
+1. **Summary**: pages crawled, images found, alt-text coverage %, issue counts by severity
+2. **Issues**: one section per failing check, listing the page, the image, and a specific fix
+3. **Prioritized action list**: ordered by severity and estimated impact
 
 ### Step 5: Recommend fixes
 
 For each issue, give a concrete, copy-pasteable recommendation. When drafting alt text:
 
 - Describe what the image shows and its purpose on the page, in roughly 5–15 words
-- Never start with "image of" or "picture of" — screen readers already announce it as an image
+- Never start with "image of" or "picture of": screen readers already announce it as an image
 - Use `alt=""` only for purely decorative images; never invent details not visible in the image
 - For dimensions, recommend the exact `width`/`height` attributes (or CSS `aspect-ratio`) that match the rendered size
 - For oversized or legacy images, recommend compressing and serving WebP/AVIF via `<picture>` with a fallback
@@ -118,13 +118,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, thresholds, and rationale for every audit check
-- `references/report-template.md` — report output structure
-- `scripts/extract_images.py` — crawl a site and build the image inventory (add `--check-files` for size/format checks)
-- `scripts/audit_images.py` — run audit checks against an image inventory JSON file
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, thresholds, and rationale for every audit check
+- `references/report-template.md`: report output structure
+- `scripts/extract_images.py`: crawl a site and build the image inventory (add `--check-files` for size/format checks)
+- `scripts/audit_images.py`: run audit checks against an image inventory JSON file

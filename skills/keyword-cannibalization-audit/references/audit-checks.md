@@ -2,7 +2,7 @@
 
 Definitions, thresholds, and rationale. **Cannibalization** is when several pages
 on the same site target the same query, so they compete with each other in the
-results — splitting links, clicks, and authority, and letting the engine pick the
+results, splitting links, clicks, and authority, and letting the engine pick the
 "wrong" page. This audit finds groups of pages that look like they chase the same
 keyword, based on their titles, H1s, and body keywords.
 
@@ -15,7 +15,7 @@ children). The audit surfaces the clusters; a human decides which to consolidate
 - **Definition:** Two or more indexable pages whose title (after removing a known
   brand suffix and stopwords) normalizes to the same phrase.
 - **Why it matters:** Identical title targets are the clearest cannibalization
-  signal — the pages explicitly chase the same query.
+  signal: the pages explicitly chase the same query.
 - **Fix:** Decide the one canonical page for that query; differentiate, merge, or
   redirect the others; and 301 or canonicalize as appropriate.
 
@@ -26,7 +26,7 @@ children). The audit surfaces the clusters; a human decides which to consolidate
   body keywords) overlap above the threshold (default Jaccard ≥ 0.6).
 - **Why it matters:** Even with different titles, pages that share most of their
   topic vocabulary compete for the same searches and dilute each other.
-- **Fix:** Establish a clear hierarchy — one primary page per intent, supporting
+- **Fix:** Establish a clear hierarchy: one primary page per intent, supporting
   pages that target distinct sub-queries and link up to the primary. Consolidate
   true overlaps; differentiate genuine variants.
 

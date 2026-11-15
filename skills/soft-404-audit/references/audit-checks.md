@@ -33,7 +33,7 @@ users hit dead ends that look like real pages.
   missing-page probe's fingerprint (same title, similarly empty) without an
   obvious error phrase.
 - **Why it matters:** Strong sign the page is the site's error/empty template
-  served under a real URL — a soft 404 that phrase-matching alone misses.
+  served under a real URL, a soft 404 that phrase-matching alone misses.
 - **Fix:** Confirm the URL should exist; if not, return 404. If it should, ensure
   the real content renders server-side.
 
@@ -51,7 +51,7 @@ users hit dead ends that look like real pages.
 ## Notes
 
 - This crawler does **not** execute JavaScript. A page that's empty in raw HTML
-  but populated by a client-side framework will look thin here — verify before
+  but populated by a client-side framework will look thin here: verify before
   treating it as a soft 404.
 - Tune `--thin-words` to the site; content-heavy sites may warrant a higher
   threshold than the default of 50.

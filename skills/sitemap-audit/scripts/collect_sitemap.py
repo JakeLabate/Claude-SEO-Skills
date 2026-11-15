@@ -13,7 +13,7 @@ For each sitemap file it records type (index/urlset), URL count, byte size, gzip
 HTTP status, and XML parse errors. For each listed URL it records lastmod /
 changefreq / priority from the sitemap, then fetches the URL (without auto-follow
 beyond one resolution) to capture status, redirect target, canonical, meta robots,
-and the X-Robots-Tag header — everything needed to flag URLs that should not be in
+and the X-Robots-Tag header, everything needed to flag URLs that should not be in
 a sitemap (non-200, redirecting, noindex, canonicalized away, blocked by robots).
 
 Output JSON schema:

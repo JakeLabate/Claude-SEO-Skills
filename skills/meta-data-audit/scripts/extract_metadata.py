@@ -6,7 +6,7 @@ Preferred: extract from a shared page cache produced by the shared fetch stage
 
     python3 extract_metadata.py --from-cache page_cache.json [--output metadata_inventory.json]
 
-Standalone (fetches on its own — fine for a single-area run):
+Standalone (fetches on its own, fine for a single-area run):
     python3 extract_metadata.py https://example.com [--max-pages 500] [--output metadata_inventory.json]
     python3 extract_metadata.py ./site-folder --local [--output metadata_inventory.json]
     python3 extract_metadata.py urls.txt --url-list [--output metadata_inventory.json]
@@ -173,7 +173,7 @@ def empty_record(status):
 def extract_from_cache(cache_path):
     """Pure: turn a shared page cache (from fetch_pages.py) into a metadata inventory.
 
-    Makes no network calls — parses the cached HTML for exactly the fields this
+    Makes no network calls: parses the cached HTML for exactly the fields this
     audit needs. This is the half of the old collector that stays after fetching
     is factored out into the shared fetch stage.
     """

@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Canonical Tag Audit — {site}
+# Canonical Tag Audit: {site}
 
 **Date:** {date}
 **Scope:** {pages crawled, canonical targets probed}
@@ -63,7 +63,7 @@ and the corrected value.}
 
 - Every row names the exact page, its current canonical, and the corrected
   absolute URL.
-- Treat **non-self canonicals** as items to confirm, not defects — list them so
+- Treat **non-self canonicals** as items to confirm, not defects: list them so
   the user can verify each consolidation is intended.
 - Group template-level problems (e.g. every paginated page canonicalizing to page
   1) as a single fix with example URLs.

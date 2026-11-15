@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Meta Data Audit — {site}
+# Meta Data Audit: {site}
 
 **Date:** {date}
 **Scope:** {scope description}
@@ -70,7 +70,7 @@ Use this structure for the final report delivered to the user.
 
 ## Guidance
 
-- Every issue row must name the exact page URL, the current value, and a concrete replacement — never generic advice.
+- Every issue row must name the exact page URL, the current value, and a concrete replacement, never generic advice.
 - Suggested titles must be near 60 characters and suggested descriptions near 155; state the character count when proposing values.
 - Base every suggested value on the page's actual content (use the H1 and visible copy from the inventory); never invent facts, prices, or claims. If a page lacks enough information to write accurate metadata, say so instead of guessing.
 - Cap tables at ~20 rows in the report body; attach or offer the full list (CSV/JSON) if larger.

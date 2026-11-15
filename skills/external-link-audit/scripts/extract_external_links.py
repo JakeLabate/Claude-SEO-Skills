@@ -124,7 +124,7 @@ def external_in(source_url, final_url, html, host):
 def extract_from_cache(cache_path):
     """Pure: collect external links from a shared page cache (from fetch_pages.py).
 
-    No network — the link checking lives in check_external_links.py, which still
+    No network: the link checking lives in check_external_links.py, which still
     probes the external URLs.
     """
     with open(cache_path, encoding="utf-8") as f:

@@ -45,7 +45,7 @@ The guiding principle: **an XML sitemap should list only final, canonical, index
 ### 7. Listed URL is noindex
 
 - **Definition:** A sitemap URL is marked `noindex` (or `none`) via a meta robots tag or the `X-Robots-Tag` HTTP header.
-- **Why it matters:** Including a page in the sitemap says "please index this", while `noindex` says the opposite — a direct conflict that confuses crawlers and wastes budget.
+- **Why it matters:** Including a page in the sitemap says "please index this", while `noindex` says the opposite, a direct conflict that confuses crawlers and wastes budget.
 - **Fix:** Decide the page's fate. If it should be indexed, remove `noindex`; if not, remove it from the sitemap.
 
 ### 8. Listed URL is blocked by robots.txt
@@ -92,4 +92,4 @@ The guiding principle: **an XML sitemap should list only final, canonical, index
 
 - **Definition:** `<priority>` outside `0.0`–`1.0`, or `<changefreq>` not one of the allowed values (`always`, `hourly`, `daily`, `weekly`, `monthly`, `yearly`, `never`).
 - **Why it matters:** Invalid values are ignored. Note that Google ignores `priority` and `changefreq` entirely regardless of validity.
-- **Fix:** Correct or, more simply, drop `priority`/`changefreq` — they add bytes without SEO benefit for Google.
+- **Fix:** Correct or, more simply, drop `priority`/`changefreq`: they add bytes without SEO benefit for Google.

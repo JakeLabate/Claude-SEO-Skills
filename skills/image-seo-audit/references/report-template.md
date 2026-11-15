@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Image SEO Audit — {site}
+# Image SEO Audit: {site}
 
 **Date:** {date}
 **Scope:** {scope description}
@@ -53,7 +53,7 @@ Use this structure for the final report delivered to the user.
 
 ## Informational
 
-{Empty alt and duplicate alt — list for confirmation, not as defects.}
+{Empty alt and duplicate alt: list for confirmation, not as defects.}
 
 ## Prioritized action list
 
@@ -63,7 +63,7 @@ Use this structure for the final report delivered to the user.
 
 ## Guidance
 
-- Every issue row must name the exact page URL and image `src`, plus a concrete fix — never generic advice.
+- Every issue row must name the exact page URL and image `src`, plus a concrete fix, never generic advice.
 - Suggested alt text must describe the image's actual visible content and purpose; never invent details you cannot see. If you cannot determine what an image shows from the page context, say so and ask, rather than guessing.
 - Distinguish missing `alt` (a real defect) from intentional `alt=""` (decorative) in the report.
 - For lazy-loading recommendations, explicitly exempt the LCP / first above-the-fold image.

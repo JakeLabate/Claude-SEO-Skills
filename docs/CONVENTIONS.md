@@ -52,7 +52,7 @@ Why split it this way:
   can re-extract, re-run the audit, tweak thresholds, or diff two runs without
   re-crawling. Extract and audit are deterministic and easy to reason about.
 - **The inventory is the source of truth.** Every finding traces back to an
-  observed fact in the inventory — never to a guess. The reporting step is told,
+  observed fact in the inventory, never to a guess. The reporting step is told,
   explicitly, to never invent URLs, prices, or claims.
 - **Claude does the judgment that needs context** (writing replacement titles,
   prioritizing by traffic), while the scripts do the judgment that should be
@@ -124,13 +124,13 @@ canonical audits are specific applications of this one idea.
 ## Standard-library only
 
 **The Python scripts depend on nothing but the Python standard library.** No
-`pip install`, no virtualenv — if you have Python 3.8+, they run. This is a
+`pip install`, no virtualenv. If you have Python 3.8+, they run. This is a
 deliberate constraint:
 
 - HTML is parsed with `html.parser.HTMLParser`, XML with
   `xml.etree.ElementTree`, HTTP with `urllib.request`, gzip with `gzip`.
 - The only optional dependency is `brotli`, and it is imported defensively
-  (`try/except`) — present means Brotli-compressed responses get decoded, absent
+  (`try/except`): present means Brotli-compressed responses get decoded, absent
   means that one check is skipped. Nothing else is optional because nothing else
   is needed.
 
@@ -154,11 +154,11 @@ A `.docx` is a ZIP of OOXML parts, so the converter builds those parts with
 tables, bullet/numbered lists, links, bold/italic, inline code, blockquotes, and
 code blocks; anything fancier degrades to plain text rather than failing. The
 conversion runs *after* the report so Claude's judgment (prioritized fixes,
-rewritten titles) is preserved — the `.docx` is the report, reformatted, not a
+rewritten titles) is preserved: the `.docx` is the report, reformatted, not a
 re-derivation from the JSON.
 
-**CSV of findings.** When a user wants the data itself — to filter, sort, or
-triage in a spreadsheet — `scripts/findings_to_csv.py` flattens the auditor's
+**CSV of findings.** When a user wants the data itself (to filter, sort, or
+triage in a spreadsheet), `scripts/findings_to_csv.py` flattens the auditor's
 `audit_report.json` into a CSV, one row per finding:
 
 ```bash
@@ -170,7 +170,7 @@ It uses the `csv` module only. Because every auditor writes the same
 skills: it prepends `check` and `severity` columns, then unions each finding's
 fields in first-seen order (list values like duplicate-sharing pages are joined
 with `; `, dicts are JSON-encoded). Unlike the `.docx`, this *is* a direct dump
-of the structured findings — the Word doc is for stakeholders, the CSV for
+of the structured findings: the Word doc is for stakeholders, the CSV for
 working the issue list.
 
 ## Shared scripts (and how they stay in sync)
@@ -180,10 +180,10 @@ appear. They have to be: the installer (`bin/cli.js`) copies skill folders
 **individually**, so a script in `tools/` alone would not exist for someone who
 installs just one skill. Skills are self-contained.
 
-- `md_to_docx.py` — the Markdown→.docx converter — goes into **every** skill.
-- `findings_to_csv.py` — the `audit_report.json`→CSV flattener — goes into
+- `md_to_docx.py` (the Markdown→.docx converter) goes into **every** skill.
+- `findings_to_csv.py` (the `audit_report.json`→CSV flattener) goes into
   **every** skill.
-- `fetch_pages.py` — the shared crawl-once fetch stage — goes into the
+- `fetch_pages.py` (the shared crawl-once fetch stage) goes into the
   **crawl-based** skills that read its cache via `--from-cache`, plus the
   `full-seo-audit` orchestrator that runs it once.
 
@@ -191,7 +191,7 @@ The canonical copies live in `tools/`. The manifest of which file lands in which
 skills is `SHARED` in `tools/sync_shared.py`. `tools/sync_shared.py` stamps each
 file into its target `skills/*/scripts/`, and `tools/validate_skills.py` (which
 imports that same manifest) fails if any required copy drifts or is missing. So:
-**edit `tools/<file>.py`, then run `python3 tools/sync_shared.py`** — never edit
+**edit `tools/<file>.py`, then run `python3 tools/sync_shared.py`**: never edit
 a per-skill copy directly. To add a skill to the page-cache set, add its name to
 `CACHE_SKILLS` in `tools/sync_shared.py` and re-run the sync.
 
@@ -220,7 +220,7 @@ These patterns recur in every collector and are worth copying verbatim:
 3. Document every check in `references/audit-checks.md` and the output shape in
    `references/report-template.md`.
 4. Add the skill to the table in `README.md`. (The CLI and npm package pick it
-   up automatically — `bin/cli.js` scans `skills/` for a `SKILL.md`, and
+   up automatically: `bin/cli.js` scans `skills/` for a `SKILL.md`, and
    `package.json` ships the whole `skills/` folder.)
 5. Run `python3 tools/sync_shared.py` to drop the shared scripts
    (`md_to_docx.py`, `findings_to_csv.py`) into the new skill's `scripts/`.

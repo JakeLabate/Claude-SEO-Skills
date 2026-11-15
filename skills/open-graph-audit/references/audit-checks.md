@@ -21,7 +21,7 @@ and referral traffic, and broken share images make links look untrustworthy.
 
 ### 3. Broken og:image
 - **Definition:** The `og:image` URL returns a non-200 status.
-- **Why it matters:** The share preview shows no image at all — worse than a
+- **Why it matters:** The share preview shows no image at all, worse than a
   missing tag because it looks broken.
 - **Fix:** Point at a live image URL; verify it returns `200`.
 
@@ -65,6 +65,6 @@ and referral traffic, and broken share images make links look untrustworthy.
 
 ## Informational (note, not counted as an issue)
 
-- **Duplicate og:image across many pages** — one share image reused on 5+ pages.
+- **Duplicate og:image across many pages**: one share image reused on 5+ pages.
   Fine for a brand default, but section- or page-specific images earn more
   engagement. Listed so you can decide.

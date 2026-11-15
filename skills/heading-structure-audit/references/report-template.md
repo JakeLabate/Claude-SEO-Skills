@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Heading Structure Audit — {site}
+# Heading Structure Audit: {site}
 
 **Date:** {date}
 **Scope:** {scope description}
@@ -59,7 +59,7 @@ Use this structure for the final report delivered to the user.
 
 ## Informational
 
-{Title/H1 mismatches and deep-outline notes — list for confirmation, not as defects.}
+{Title/H1 mismatches and deep-outline notes: list for confirmation, not as defects.}
 
 ## Prioritized action list
 
@@ -69,7 +69,7 @@ Use this structure for the final report delivered to the user.
 
 ## Guidance
 
-- Every issue row must name the exact page URL and the offending heading(s), plus a concrete fix — never generic advice.
+- Every issue row must name the exact page URL and the offending heading(s), plus a concrete fix, never generic advice.
 - Suggested headings must reflect the page's actual content (use the existing headings and title from the inventory as context); never invent topics the page does not cover.
 - For skipped-level and multiple-H1 issues, recommend the specific level change (e.g., "change this H4 to H3") rather than restating the rule.
 - Cap tables at ~20 rows in the report body; attach or offer the full list (CSV/JSON) if larger.

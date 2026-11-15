@@ -16,10 +16,10 @@ Checks implemented (see references/audit-checks.md):
 - sitemap_unreachable: a declared Sitemap: URL is non-200 or not absolute (medium)
 - no_star_group: no default User-agent: * group (medium)
 - unsupported_directive: noindex/nofollow/crawl-delay etc. that Google ignores (medium/low)
-- robots_404: robots.txt missing entirely (low — means "allow all", but worth a real file)
+- robots_404: robots.txt missing entirely (low; means "allow all", but worth a real file)
 - duplicate_star_group: more than one User-agent: * group (low)
 - has_bom: a UTF-8 BOM precedes the file (low)
-- empty_disallow_confusion: Disallow: with no value (allows everything — often a mistake) (low)
+- empty_disallow_confusion: Disallow: with no value (allows everything, often a mistake) (low)
 
 Uses only the Python standard library.
 """

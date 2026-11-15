@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Core Web Vitals Audit — {site}
+# Core Web Vitals Audit: {site}
 
 **Date:** {date}
 **Scope:** {scope description}
@@ -65,7 +65,7 @@ Use this structure for the final report delivered to the user.
 
 - Map every finding to the vital it affects (LCP / CLS / INP) so the user can prioritize by what is actually failing in the field.
 - When PSI field data exists, lead with it (the verdict) and use lab proxies to explain the cause. When it does not exist for a URL, say so and rely on lab proxies.
-- Cite the concrete measurement in every row (the file, the byte count, the node count, the attribute) — never generic advice like "optimize images".
+- Cite the concrete measurement in every row (the file, the byte count, the node count, the attribute), never generic advice like "optimize images".
 - The single highest-leverage LCP fixes are usually: stop lazy-loading the LCP image, enable text compression, and remove render-blocking resources. Call these out first when present.
 - Note that measured TTFB reflects the audit machine's network; corroborate with PSI field TTFB before making server-side recommendations.
 - Cap tables at ~20 rows in the report body; attach or offer the full list (CSV/JSON) if larger.

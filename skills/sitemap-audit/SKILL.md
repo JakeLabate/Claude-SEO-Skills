@@ -22,9 +22,9 @@ Use this skill when the user asks to:
 
 Before starting, confirm with the user:
 
-1. **Site URL or sitemap URL** — a live site root (e.g., `https://example.com`, which auto-discovers sitemaps via robots.txt and common paths) or a specific sitemap URL (`--sitemap`).
-2. **Scope** — how many listed URLs to probe (default 2000). Large sitemaps can be sampled with `--max-urls`.
-3. **Probing** — whether to fetch each listed URL to check status/canonical/noindex (default on). Use `--no-probe` for a fast structural-only pass (parse errors, size limits, lastmod hygiene).
+1. **Site URL or sitemap URL**: a live site root (e.g., `https://example.com`, which auto-discovers sitemaps via robots.txt and common paths) or a specific sitemap URL (`--sitemap`).
+2. **Scope**: how many listed URLs to probe (default 2000). Large sitemaps can be sampled with `--max-urls`.
+3. **Probing**: whether to fetch each listed URL to check status/canonical/noindex (default on). Use `--no-probe` for a fast structural-only pass (parse errors, size limits, lastmod hygiene).
 
 > **Note on the indexable contract:** every URL in an XML sitemap should be a final, canonical, indexable `200` page. A URL that redirects, 404s, is noindexed, is blocked by robots.txt, or canonicalizes elsewhere does not belong in the sitemap. Most checks here enforce that contract.
 
@@ -79,10 +79,10 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — sitemaps found, total URLs listed, URLs probed, issue counts by severity
-2. **Sitemap files** — table of each sitemap: type, URL count, size, gzip, errors
-3. **Issues** — one section per failing check, listing the URL, the problem, and the fix
-4. **Prioritized action list** — ordered by severity and impact
+1. **Summary**: sitemaps found, total URLs listed, URLs probed, issue counts by severity
+2. **Sitemap files**: table of each sitemap: type, URL count, size, gzip, errors
+3. **Issues**: one section per failing check, listing the URL, the problem, and the fix
+4. **Prioritized action list**: ordered by severity and impact
 
 ### Step 5: Recommend fixes
 
@@ -115,13 +115,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, thresholds, and rationale for every audit check
-- `references/report-template.md` — report output structure
-- `scripts/collect_sitemap.py` — discover, parse, and probe a site's XML sitemaps
-- `scripts/audit_sitemap.py` — run audit checks against a sitemap inventory JSON file
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, thresholds, and rationale for every audit check
+- `references/report-template.md`: report output structure
+- `scripts/collect_sitemap.py`: discover, parse, and probe a site's XML sitemaps
+- `scripts/audit_sitemap.py`: run audit checks against a sitemap inventory JSON file

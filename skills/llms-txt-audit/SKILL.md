@@ -42,9 +42,9 @@ A companion `/llms-full.txt` may contain the full expanded content in one file. 
 
 Before starting, confirm with the user:
 
-1. **Site URL or llms.txt URL** — a live site root (e.g., `https://example.com`, which fetches `/llms.txt`) or a specific llms.txt URL (`--llms`).
-2. **Scope** — how many referenced links to probe (default 300, capped with `--max-urls`).
-3. **Probing** — whether to fetch each link to check status/redirect/noindex (default on). Use `--no-probe` for a fast structure-only pass.
+1. **Site URL or llms.txt URL**: a live site root (e.g., `https://example.com`, which fetches `/llms.txt`) or a specific llms.txt URL (`--llms`).
+2. **Scope**: how many referenced links to probe (default 300, capped with `--max-urls`).
+3. **Probing**: whether to fetch each link to check status/redirect/noindex (default on). Use `--no-probe` for a fast structure-only pass.
 
 ## Workflow
 
@@ -99,10 +99,10 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — file status, H1, sections, links found/probed, issue counts by severity
-2. **File structure** — H1, summary present, section list, llms-full.txt presence
-3. **Issues** — one section per failing check, listing the link/item, the problem, and the fix
-4. **Prioritized action list** — ordered by severity and impact
+1. **Summary**: file status, H1, sections, links found/probed, issue counts by severity
+2. **File structure**: H1, summary present, section list, llms-full.txt presence
+3. **Issues**: one section per failing check, listing the link/item, the problem, and the fix
+4. **Prioritized action list**: ordered by severity and impact
 
 ### Step 5: Recommend fixes
 
@@ -110,7 +110,7 @@ For each issue, give a concrete fix:
 
 - **Missing file:** create `/llms.txt` with at minimum an H1 title, a one-line `>` summary, and one or more `## ` sections of curated `- [name](url): description` links. Serve it as `text/markdown` or `text/plain` at the root with a `200`.
 - **Served as HTML / wrong content type:** serve the raw markdown file, not a rendered page; set `Content-Type: text/markdown` (or `text/plain`).
-- **Missing H1:** add a single top-level `# Project Name` heading — it is the only required element.
+- **Missing H1:** add a single top-level `# Project Name` heading: it is the only required element.
 - **Broken / redirecting / blocked links:** replace each with its final, canonical, indexable `200` URL (or remove it). Links in llms.txt should point straight to the live destination.
 - **Missing descriptions / malformed items:** rewrite each item as `- [Descriptive title](absolute-url): one-line description` so an LLM can tell what each link is for.
 - **Relative URLs:** use absolute `https://` URLs so the file works when fetched out of context.
@@ -137,13 +137,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions and rationale for every audit check
-- `references/report-template.md` — report output structure
-- `scripts/collect_llms.py` — fetch, parse, and probe a site's llms.txt
-- `scripts/audit_llms.py` — run audit checks against an llms.txt inventory JSON file
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions and rationale for every audit check
+- `references/report-template.md`: report output structure
+- `scripts/collect_llms.py`: fetch, parse, and probe a site's llms.txt
+- `scripts/audit_llms.py`: run audit checks against an llms.txt inventory JSON file

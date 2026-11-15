@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Redirect Audit — {site}
+# Redirect Audit: {site}
 
 **Date:** {date}
 **Scope:** {scope description}

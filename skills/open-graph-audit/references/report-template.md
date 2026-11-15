@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Open Graph / Social Metadata Audit — {site}
+# Open Graph / Social Metadata Audit: {site}
 
 **Date:** {date}
 **Scope:** {pages crawled, share images probed}
@@ -55,10 +55,10 @@ relative og:image. Table with page, current value, corrected value.}
 
 ## Guidance
 
-- Lead with broken and missing images — those have the most visible impact on
+- Lead with broken and missing images: those have the most visible impact on
   shares.
 - Every row names the exact page, the current value, and a concrete replacement.
   Suggested `og:image` URLs must be absolute `https://`.
 - Group template-level gaps (e.g. the whole blog missing `og:image`) as one fix.
-- Treat duplicate/default images as a judgement call to surface, not a defect.
+- Treat duplicate/default images as a judgment call to surface, not a defect.
 - Base every status on the probed image data; never assume an image works.

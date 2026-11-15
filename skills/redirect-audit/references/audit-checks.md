@@ -8,7 +8,7 @@ Full definitions, thresholds, and rationale for each audit check.
 
 - **Definition:** The chain returns to a URL it has already visited (A → B → A, or a URL redirecting to itself).
 - **Why it matters:** The page never resolves. Browsers show "too many redirects", and crawlers abandon the URL, so it cannot rank or pass equity.
-- **Fix:** Find the two rules in conflict — most loops come from a pair of competing normalizations (trailing slash vs. no slash, www vs. non-www, HTTP vs. HTTPS, lowercase vs. mixed case). Keep one canonical form and make the other redirect to it exactly once.
+- **Fix:** Find the two rules in conflict: most loops come from a pair of competing normalizations (trailing slash vs. no slash, www vs. non-www, HTTP vs. HTTPS, lowercase vs. mixed case). Keep one canonical form and make the other redirect to it exactly once.
 
 ### 2. Redirect chain ends in a 4xx/5xx/error
 

@@ -7,7 +7,7 @@ Full definitions, severities, and rationale for each audit check, plus required/
 ### 1. Invalid JSON-LD
 
 - **Definition:** A `<script type="application/ld+json">` block whose contents fail JSON parsing (trailing commas, unescaped quotes, comments, truncation).
-- **Why it matters:** Invalid blocks are ignored entirely by search engines — the page gets no structured data benefit from them.
+- **Why it matters:** Invalid blocks are ignored entirely by search engines: the page gets no structured data benefit from them.
 - **Fix:** Correct the JSON syntax. Validate with a JSON parser before deploying.
 
 ### 2. Missing required properties

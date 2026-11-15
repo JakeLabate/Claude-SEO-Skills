@@ -6,8 +6,8 @@ Usage:
     python3 extract_resources.py urls.txt --url-list [--output resource_inventory.json]
 
 For each crawled page it records the page URL/status and every subresource it
-loads or links to — scripts, stylesheets, images, iframes, media, embeds, and
-form actions — with the tag, attribute, and the (resolved) URL's scheme. The
+loads or links to: scripts, stylesheets, images, iframes, media, embeds, and
+form actions, with the tag, attribute, and the (resolved) URL's scheme. The
 auditor uses this to find mixed content (http resources on an https page).
 
 Uses only the Python standard library.
@@ -113,7 +113,7 @@ def pages_from_sitemap(site):
 def extract_from_cache(cache_path):
     """Pure: turn a shared page cache (from fetch_pages.py) into a resource inventory.
 
-    No network — parses the cached HTML for the subresource references this audit needs.
+    No network: parses the cached HTML for the subresource references this audit needs.
     """
     with open(cache_path, encoding="utf-8") as f:
         cache = json.load(f)

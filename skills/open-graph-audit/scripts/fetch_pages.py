@@ -7,7 +7,7 @@ site is crawled a single time and all audits read from the same snapshot:
     fetch (this script)  ->  page_cache.json  ->  extract_*.py (pure)  ->  *_inventory.json
 
 The cache stores raw HTML and the response facts every collector needs, and nothing
-audit-specific — each skill's extractor pulls only the bits it cares about. Because
+audit-specific, each skill's extractor pulls only the bits it cares about. Because
 fetching is the only network stage, everything downstream is pure and re-runnable
 offline.
 
@@ -55,7 +55,7 @@ MAX_BYTES = 2_000_000
 class LinkParser(HTMLParser):
     """Pull same-document <a href> links so the crawler can do a same-host BFS.
 
-    The fetch stage only needs links to know where to crawl next — every other
+    The fetch stage only needs links to know where to crawl next: every other
     tag is left for the per-skill extractors to parse from the cached HTML.
     """
 

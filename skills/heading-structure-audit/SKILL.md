@@ -21,10 +21,10 @@ Use this skill when the user asks to:
 
 Before starting, confirm with the user:
 
-1. **Site URL or local files** — a live site root URL (e.g., `https://example.com`), a sitemap URL, a list of URLs, or a local folder of HTML files.
-2. **Scope** — full site, a specific section (e.g., `/blog/`), or a list of URLs.
-3. **Crawl limits** — max pages (default 500) for live crawls.
-4. **Long-heading threshold** — character count above which a heading is "too long" (default 70).
+1. **Site URL or local files**: a live site root URL (e.g., `https://example.com`), a sitemap URL, a list of URLs, or a local folder of HTML files.
+2. **Scope**: full site, a specific section (e.g., `/blog/`), or a list of URLs.
+3. **Crawl limits**: max pages (default 500) for live crawls.
+4. **Long-heading threshold**: character count above which a heading is "too long" (default 70).
 
 ## Workflow
 
@@ -73,9 +73,9 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — pages crawled, headings found, issue counts by severity
-2. **Issues** — one section per failing check, listing the page, the offending heading(s), and a specific fix
-3. **Prioritized action list** — ordered by severity and estimated impact
+1. **Summary**: pages crawled, headings found, issue counts by severity
+2. **Issues**: one section per failing check, listing the page, the offending heading(s), and a specific fix
+3. **Prioritized action list**: ordered by severity and estimated impact
 
 ### Step 5: Recommend fixes
 
@@ -84,12 +84,12 @@ For each issue, give a concrete, copy-pasteable recommendation. When proposing h
 - Every page should have exactly one H1 that states the page's primary topic
 - Headings should form a logical, gap-free outline: H1 → H2 → H3, never skipping a level downward
 - Base every suggested heading on the page's actual content; never invent topics the page does not cover
-- Reserve heading tags for true section titles — do not wrap styling-only text in headings, and do not demote real section titles to `<div>`s for visual reasons (use CSS instead)
+- Reserve heading tags for true section titles: do not wrap styling-only text in headings, and do not demote real section titles to `<div>`s for visual reasons (use CSS instead)
 
 Example recommendations:
 
 - Add an H1 to `/pricing`: `H1: Pricing Plans for Teams of Every Size`
-- `/blog/post-1` jumps from H2 to H4 under "Methodology" — change the H4 subsections to H3
+- `/blog/post-1` jumps from H2 to H4 under "Methodology": change the H4 subsections to H3
 - Merge the two H1s on the homepage; demote the tagline H1 to a paragraph and keep the brand-value H1
 
 ## Optional: export the report
@@ -112,13 +112,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, thresholds, and rationale for every audit check
-- `references/report-template.md` — report output structure
-- `scripts/extract_headings.py` — crawl a site and build the heading inventory
-- `scripts/audit_headings.py` — run audit checks against a heading inventory JSON file
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, thresholds, and rationale for every audit check
+- `references/report-template.md`: report output structure
+- `scripts/extract_headings.py`: crawl a site and build the heading inventory
+- `scripts/audit_headings.py`: run audit checks against a heading inventory JSON file

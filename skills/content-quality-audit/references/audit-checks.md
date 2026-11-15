@@ -2,7 +2,7 @@
 
 Definitions, thresholds, and rationale. These checks flag pages that are unlikely
 to rank or add value because they are too thin, duplicated, or buried under
-markup. They are signals for human review, not verdicts — "thin" depends on
+markup. They are signals for human review, not verdicts: "thin" depends on
 intent (a contact page is meant to be short).
 
 ## High severity
@@ -14,7 +14,7 @@ intent (a contact page is meant to be short).
   can drag down site-wide quality signals when there are many of them.
 - **Fix:** Expand with genuinely useful content, consolidate several thin pages
   into one strong page, or `noindex` pages that exist for non-search reasons.
-- **Caveat:** This crawler doesn't run JavaScript — a page populated client-side
+- **Caveat:** This crawler doesn't run JavaScript: a page populated client-side
   will look thin. Verify before acting.
 
 ### 2. Duplicate content
@@ -29,7 +29,7 @@ intent (a contact page is meant to be short).
 
 ### 3. Near-duplicate content
 - **Definition:** Two pages whose MinHash similarity exceeds the threshold
-  (default 0.85) — nearly the same text, e.g. templated pages where only a name or
+  (default 0.85): nearly the same text, e.g. templated pages where only a name or
   city changes.
 - **Why it matters:** Doorway-style near-duplicates add little unique value and can
   be treated as duplicates.
@@ -58,5 +58,5 @@ intent (a contact page is meant to be short).
 - **Tune the thresholds to the site.** A documentation site and a news site have
   very different "normal" word counts; pass `--thin-words` and `--similarity`
   accordingly. The summary reports the median word count to help calibrate.
-- **JavaScript rendering** is the most common false positive across these checks —
+- **JavaScript rendering** is the most common false positive across these checks:
   always confirm a flagged page isn't simply rendered client-side.

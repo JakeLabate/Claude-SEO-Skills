@@ -7,7 +7,7 @@ Usage:
 Checks implemented (see references/audit-checks.md):
 - no_llms_txt: /llms.txt is missing (non-200) (high)
 - served_as_html: /llms.txt returns an HTML page, not markdown/plain text (high)
-- missing_h1: no top-level H1 title — the one required element (high)
+- missing_h1: no top-level H1 title, the one required element (high)
 - link_error: a referenced link returns 4xx/5xx/error (high)
 - llms_redirect: /llms.txt itself redirects instead of returning the file (medium)
 - link_redirects: a referenced link 3xx-redirects instead of being a final 200 (medium)

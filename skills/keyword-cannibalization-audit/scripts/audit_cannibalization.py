@@ -7,9 +7,9 @@ Usage:
 
 Checks (see references/audit-checks.md):
 - duplicate_title_target (high): 2+ indexable pages with the same normalized title
-  core — they target the same query head-on
+  core: they target the same query head-on
 - overlapping_targets (medium): clusters of pages whose title+H1 keyword sets
-  overlap above the threshold (Jaccard) — competing for the same topic
+  overlap above the threshold (Jaccard), competing for the same topic
 - shared_primary_keyword (low): pages sharing the same significant title bigram
 
 Clustering uses union-find over pairwise Jaccard of each page's keyword signature
