@@ -7,14 +7,14 @@ Full definitions, thresholds, and rationale for each audit check.
 ### 1. Missing H1
 
 - **Definition:** A page with no `<h1>` element.
-- **Why it matters:** The H1 is the strongest on-page structural signal of what the page is about — a headline for both users and search engines. Its absence leaves the page's primary topic ambiguous.
+- **Why it matters:** The H1 is the strongest on-page structural signal of what the page is about, a headline for both users and search engines. Its absence leaves the page's primary topic ambiguous.
 - **Fix:** Add a single H1 stating the page's primary topic, ideally aligned with the title tag and target query.
 
 ### 2. No headings at all
 
 - **Definition:** A page with zero heading elements (H1–H6).
 - **Why it matters:** A page with no headings has no machine-readable outline; it is hard for screen-reader users to navigate and gives search engines no structural cues. It often indicates content rendered as undifferentiated `<div>`/`<p>` soup.
-- **Fix:** Introduce a proper heading outline — one H1 plus H2/H3 section headings reflecting the content's structure.
+- **Fix:** Introduce a proper heading outline: one H1 plus H2/H3 section headings reflecting the content's structure.
 
 ## Medium severity
 
@@ -28,7 +28,7 @@ Full definitions, thresholds, and rationale for each audit check.
 
 - **Definition:** The outline descends by more than one level between consecutive headings (e.g., an H2 followed directly by an H4).
 - **Why it matters:** Skipped levels break the logical document outline that assistive technology relies on and obscure the content hierarchy.
-- **Fix:** Use the next sequential level when nesting (H2 → H3 → H4). Never choose a heading level for its default font size — style with CSS instead.
+- **Fix:** Use the next sequential level when nesting (H2 → H3 → H4). Never choose a heading level for its default font size: style with CSS instead.
 
 ### 5. Empty heading
 
@@ -58,6 +58,6 @@ Full definitions, thresholds, and rationale for each audit check.
 
 ## Informational (note, do not count as issues)
 
-- **Title / H1 mismatch** — the H1 and the `<title>` share no significant words. Sometimes intentional (title optimized for the SERP, H1 for the page), but a large divergence is worth confirming.
-- **Very deep outlines** — frequent use of H5/H6 can indicate over-nesting; review whether the content is genuinely that deep.
-- **CSS-styled fake headings** — visually bold text that is not marked up as a heading is invisible to this audit and to assistive tech; if the page "looks" structured but reports no headings, suspect this and recommend real heading markup.
+- **Title / H1 mismatch**: the H1 and the `<title>` share no significant words. Sometimes intentional (title optimized for the SERP, H1 for the page), but a large divergence is worth confirming.
+- **Very deep outlines**: frequent use of H5/H6 can indicate over-nesting; review whether the content is genuinely that deep.
+- **CSS-styled fake headings**: visually bold text that is not marked up as a heading is invisible to this audit and to assistive tech; if the page "looks" structured but reports no headings, suspect this and recommend real heading markup.

@@ -1,6 +1,6 @@
 <!-- Illustrative sample output for the meta-data-audit skill. Fictional data. -->
 
-# Meta Data Audit — example.com
+# Meta Data Audit: example.com
 
 **Date:** 2026-06-18
 **Scope:** Crawled from the homepage via sitemap seeds, same-host only.
@@ -16,7 +16,7 @@
 
 Metadata is templated but largely unfinished: 24 product pages share one title
 and one description, and the entire `/blog/tag/` section is missing descriptions.
-The highest-impact win is differentiating the product titles — they currently
+The highest-impact win is differentiating the product titles: they currently
 compete with each other for the same queries.
 
 ## Length distribution
@@ -32,19 +32,19 @@ compete with each other for the same queries.
 
 ### Missing meta descriptions (24)
 
-All under `/blog/tag/*` — the tag template has no description field.
+All under `/blog/tag/*`: the tag template has no description field.
 
 | Page | Suggested description |
 |---|---|
 | `/blog/tag/onboarding/` | Articles on user onboarding: activation flows, checklists, and first-run UX. 14 posts from the Acme team. (118 chars) |
-| `/blog/tag/retention/` | Retention strategy, cohort analysis, and churn-reduction tactics — 9 in-depth posts for SaaS teams. (104 chars) |
+| `/blog/tag/retention/` | Retention strategy, cohort analysis, and churn-reduction tactics - 9 in-depth posts for SaaS teams. (104 chars) |
 | … 22 more (full list in `audit_report.json`) | Template-level fix: add a description field to the tag template. |
 
 ### Duplicate titles (1 group, 24 pages)
 
 | Shared title | Pages | Suggested differentiation |
 |---|---|---|
-| `Acme Widgets — Buy Online` | `/products/widget-a/`, `/products/widget-b/`, … (24) | Interpolate the product name: `{Product Name} — Acme Widgets` |
+| `Acme Widgets - Buy Online` | `/products/widget-a/`, `/products/widget-b/`, … (24) | Interpolate the product name: `{Product Name} - Acme Widgets` |
 
 ## Medium-severity issues
 
@@ -53,15 +53,15 @@ All under `/blog/tag/*` — the tag template has no description field.
 | Page | Current title (length) | Suggested rewrite |
 |---|---|---|
 | `/blog/the-complete-guide-to…/` | `The Complete Guide to Customer Onboarding for SaaS Companies in 2026` (68) | `The Complete Guide to SaaS Customer Onboarding (2026)` (53) |
-| `/pricing/enterprise/` | `Enterprise Pricing Plans and Custom Quotes for Large Teams — Acme` (65) | `Enterprise Pricing & Custom Quotes — Acme` (42) |
+| `/pricing/enterprise/` | `Enterprise Pricing Plans and Custom Quotes for Large Teams - Acme` (65) | `Enterprise Pricing & Custom Quotes - Acme` (42) |
 | … 45 more | | |
 
 ### Titles too short (11)
 
 | Page | Current title (length) | Suggested rewrite |
 |---|---|---|
-| `/about/` | `About` (5) | `About Acme — Our Team & Mission` (32) |
-| `/blog/` | `Blog` (4) | `Acme Blog — SaaS Growth & Onboarding` (37) |
+| `/about/` | `About` (5) | `About Acme - Our Team & Mission` (32) |
+| `/blog/` | `Blog` (4) | `Acme Blog - SaaS Growth & Onboarding` (37) |
 
 ## Low-severity issues
 
@@ -72,7 +72,7 @@ All under `/blog/tag/*` — the tag template has no description field.
 ## Prioritized action list
 
 1. **Differentiate the 24 product titles** (high, ~30% of crawled pages). Change
-   the product template to `{Product Name} — Acme Widgets`. Highest traffic
+   the product template to `{Product Name} - Acme Widgets`. Highest traffic
    section; these pages currently cannibalize each other.
 2. **Add descriptions to the 24 blog tag pages** (high). Add a description field
    to the tag template; paste-ready values above.

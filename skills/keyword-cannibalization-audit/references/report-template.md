@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Keyword Cannibalization Audit — {site}
+# Keyword Cannibalization Audit: {site}
 
 **Date:** {date}
 **Scope:** {pages crawled}
@@ -28,7 +28,7 @@ cluster. Remind the reader these are candidates to confirm, not automatic merges
 
 ## Medium-severity: overlapping target clusters ({n})
 
-### Cluster {i} — {shared keywords}
+### Cluster {i}: {shared keywords}
 | Page | Title | Role |
 |---|---|---|
 | ... | ... | primary / supporting / consolidate |
@@ -52,7 +52,7 @@ cluster. Remind the reader these are candidates to confirm, not automatic merges
 
 - **Frame as hierarchy, not deletion.** For each cluster, recommend one primary
   page and a role for every other page (support / differentiate / merge / redirect)
-  — don't blanket-recommend removing pages.
+ : don't blanket-recommend removing pages.
 - **Always say "confirm with query data."** This audit infers competition from
   on-page signals; Search Console (or analytics) confirms whether URLs actually
   swap for the same query.

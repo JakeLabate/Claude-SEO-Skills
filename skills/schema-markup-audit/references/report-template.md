@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Schema Markup Audit — {site}
+# Schema Markup Audit: {site}
 
 **Date:** {date}
 **Scope:** {scope description}

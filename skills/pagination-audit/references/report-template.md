@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Pagination Audit — {site}
+# Pagination Audit: {site}
 
 **Date:** {date}
 **Scope:** {pages crawled}
@@ -51,14 +51,14 @@ for indexing; harmless to keep, but not a substitute for the fixes above.
 
 ## Prioritized action list
 
-1. {Highest-impact fix — usually a single template change making page 2+
+1. {Highest-impact fix, usually a single template change making page 2+
    self-canonical and indexable across the whole site. Name the affected sections.}
 2. ...
 ```
 
 ## Guidance
 
-- Pagination problems are almost always **template-level** — one fix to the
+- Pagination problems are almost always **template-level**: one fix to the
   listing template clears every paginated page. Frame the action list that way and
   give a couple of example URLs per pattern.
 - Lead with the canonical-to-page-1 issue; it's the one that actually de-indexes

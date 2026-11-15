@@ -68,7 +68,7 @@ function getFlagValue(args, name) {
 }
 
 function listSkills() {
-  console.log("\nclaude-seo-skills — available skills:\n");
+  console.log("\nclaude-seo-skills available skills:\n");
   for (const skill of SKILLS) {
     const desc = readDescription(skill);
     console.log("  \x1b[1m" + skill + "\x1b[0m");
@@ -84,13 +84,13 @@ function listSkills() {
 function copySkill(skill, targetDir, force) {
   const src = path.join(SKILLS_DIR, skill);
   if (!fs.existsSync(src)) {
-    console.error("  \x1b[31m✗\x1b[0m " + skill + " — not found in package");
+    console.error("  \x1b[31m✗\x1b[0m " + skill + ": not found in package");
     return false;
   }
   const dest = path.join(targetDir, skill);
   if (fs.existsSync(dest) && !force) {
     console.log(
-      "  \x1b[33m•\x1b[0m " + skill + " — already exists (use --force to overwrite)"
+      "  \x1b[33m•\x1b[0m " + skill + ": already exists (use --force to overwrite)"
     );
     return false;
   }
@@ -142,7 +142,7 @@ function printHelp() {
   console.log(
     [
       "",
-      "claude-seo-skills — install Claude Agent Skills for SEO audits.",
+      "claude-seo-skills: install Claude Agent Skills for SEO audits.",
       "",
       "Usage:",
       "  npx claude-seo-skills <command> [skills...] [options]",

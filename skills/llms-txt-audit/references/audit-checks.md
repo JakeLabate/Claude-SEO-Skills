@@ -2,7 +2,7 @@
 
 Full definitions, thresholds, and rationale for each audit check.
 
-The guiding principle: **`/llms.txt` should be a valid markdown file, served as plain text/markdown from the site root, that opens with an H1 title and a one-line summary and then offers curated sections of well-described links — each pointing to a final, canonical, reachable `200` page.** It is a human- and LLM-readable map of your best content, so structure and link health are everything. The spec lives at https://llmstxt.org.
+The guiding principle: **`/llms.txt` should be a valid markdown file, served as plain text/markdown from the site root, that opens with an H1 title and a one-line summary and then offers curated sections of well-described links, each pointing to a final, canonical, reachable `200` page.** It is a human- and LLM-readable map of your best content, so structure and link health are everything. The spec lives at https://llmstxt.org.
 
 ## High severity
 
@@ -10,7 +10,7 @@ The guiding principle: **`/llms.txt` should be a valid markdown file, served as 
 
 - **Definition:** `/llms.txt` returns a non-200 status (404, error, etc.).
 - **Why it matters:** Without the file, AI assistants have no curated entry point to the site and fall back to crawling or guessing. For a site that wants strong LLM discoverability, the absence of the file is the headline finding.
-- **Fix:** Create `/llms.txt` with an H1 title, a `>` summary, and at least one `## ` section of curated links. (Note: the standard is emerging and optional — if the user does not want one, this is informational rather than a defect.)
+- **Fix:** Create `/llms.txt` with an H1 title, a `>` summary, and at least one `## ` section of curated links. (Note: the standard is emerging and optional; if the user does not want one, this is informational rather than a defect.)
 
 ### 2. Served as HTML
 

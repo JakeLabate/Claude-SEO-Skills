@@ -14,7 +14,7 @@ Checks (see references/audit-checks.md):
 - missing_h1 (low): indexable page with no H1 to frame the content
 
 Near-duplicate detection uses the 32-value MinHash signatures from the collector,
-so it is O(n^2) over small fixed-size signatures — fast and dependency-free.
+so it is O(n^2) over small fixed-size signatures, fast and dependency-free.
 
 Uses only the Python standard library.
 """

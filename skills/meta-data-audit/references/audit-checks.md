@@ -84,7 +84,7 @@ Full definitions, thresholds, and rationale for each audit check.
 
 ## Informational (note, do not count as issues)
 
-- **Title/H1 mismatch** — the title and the first `<h1>` describe different topics. Often deliberate (titles optimized for SERPs, H1s for the page), but large divergence is worth a look.
-- **og:title / og:description divergence** — social metadata that differs wildly from the SERP metadata; confirm it is intentional.
-- **Noindexed pages with metadata issues** — excluded from duplicate checks by default; list separately if the user wants full coverage.
-- **Identical title and description across pagination** — paginated series (`?page=2`) often inherit page 1 metadata; recommend appending page numbers.
+- **Title/H1 mismatch**: the title and the first `<h1>` describe different topics. Often deliberate (titles optimized for SERPs, H1s for the page), but large divergence is worth a look.
+- **og:title / og:description divergence**: social metadata that differs wildly from the SERP metadata; confirm it is intentional.
+- **Noindexed pages with metadata issues**: excluded from duplicate checks by default; list separately if the user wants full coverage.
+- **Identical title and description across pagination**: paginated series (`?page=2`) often inherit page 1 metadata; recommend appending page numbers.

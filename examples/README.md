@@ -3,7 +3,7 @@
 These are **illustrative** sample reports showing what each skill produces. They
 were written against a fictional site (`example.com`) to demonstrate format,
 depth, and the kind of concrete, paste-ready fixes the skills aim for. The
-numbers and URLs are invented for the example — a real run reports only what it
+numbers and URLs are invented for the example: a real run reports only what it
 observes on your site.
 
 | Example | Skill | Shows |

@@ -143,7 +143,7 @@ def analyze(url, html):
 def extract_from_cache(cache_path):
     """Pure: turn a shared page cache (from fetch_pages.py) into a target inventory.
 
-    No network — analyzes the cached HTML for exactly the signals this audit needs.
+    No network: analyzes the cached HTML for exactly the signals this audit needs.
     """
     with open(cache_path, encoding="utf-8") as f:
         cache = json.load(f)

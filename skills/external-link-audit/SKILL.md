@@ -21,10 +21,10 @@ Use this skill when the user asks to:
 
 Before starting, confirm with the user:
 
-1. **Site URL or local files** — a live site root URL (e.g., `https://example.com`), a sitemap URL, or a local folder of HTML files.
-2. **Scope** — full site, a specific section (e.g., `/blog/`), or a list of URLs.
-3. **Crawl limits** — max pages (default 500) and max depth (default 5) for live crawls.
-4. **Known paid/affiliate domains** — domains that must carry `rel="sponsored"` (e.g., `amzn.to`, affiliate networks), if any.
+1. **Site URL or local files**: a live site root URL (e.g., `https://example.com`), a sitemap URL, or a local folder of HTML files.
+2. **Scope**: full site, a specific section (e.g., `/blog/`), or a list of URLs.
+3. **Crawl limits**: max pages (default 500) and max depth (default 5) for live crawls.
+4. **Known paid/affiliate domains**: domains that must carry `rel="sponsored"` (e.g., `amzn.to`, affiliate networks), if any.
 
 ## Workflow
 
@@ -75,10 +75,10 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — pages crawled, external links found, unique domains, issue counts by severity
-2. **Domain overview** — most-linked external domains with link counts and follow/nofollow split
-3. **Issues** — one section per failing check, listing source page, target URL, anchor text, and a specific fix
-4. **Prioritized action list** — ordered by severity and estimated impact
+1. **Summary**: pages crawled, external links found, unique domains, issue counts by severity
+2. **Domain overview**: most-linked external domains with link counts and follow/nofollow split
+3. **Issues**: one section per failing check, listing source page, target URL, anchor text, and a specific fix
+4. **Prioritized action list**: ordered by severity and estimated impact
 
 ### Step 5: Recommend fixes
 
@@ -109,13 +109,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, thresholds, and rationale for every audit check
-- `references/report-template.md` — report output structure
-- `scripts/extract_external_links.py` — crawl a site and build the external link inventory
-- `scripts/check_external_links.py` — resolve target statuses and run audit checks
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, thresholds, and rationale for every audit check
+- `references/report-template.md`: report output structure
+- `scripts/extract_external_links.py`: crawl a site and build the external link inventory
+- `scripts/check_external_links.py`: resolve target statuses and run audit checks

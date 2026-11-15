@@ -295,7 +295,7 @@ def parse_page(url, html):
 def extract_from_cache(cache_path):
     """Pure: turn a shared page cache (from fetch_pages.py) into a schema inventory.
 
-    No network — parses the cached HTML for exactly the fields this audit needs.
+    No network: parses the cached HTML for exactly the fields this audit needs.
     """
     with open(cache_path, encoding="utf-8") as f:
         cache = json.load(f)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Flatten an audit_report.json findings block into a single CSV.
 
-Standard-library only — no pip install. Every audit script in this repo writes
+Standard-library only, no pip install. Every audit script in this repo writes
 an audit_report.json with the same top-level shape:
 
     {"summary": {...},

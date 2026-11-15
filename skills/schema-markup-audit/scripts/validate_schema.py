@@ -231,7 +231,7 @@ def audit(inventory):
             if count > 1 and t in TYPE_RULES and t not in ("Review",):
                 issues.append({
                     "check": "duplicate_schema_blocks", "severity": "medium", "page": url,
-                    "type": t, "detail": f"{count} blocks of type {t} on one page — verify they are distinct entities or merge them",
+                    "type": t, "detail": f"{count} blocks of type {t} on one page: verify they are distinct entities or merge them",
                 })
 
         # 11. Mixed formats for the same type

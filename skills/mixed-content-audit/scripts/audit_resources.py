@@ -12,7 +12,7 @@ Checks (see references/audit-checks.md):
 - insecure_page (info): the page itself was served over http://
 
 Only pages served over https are checked for mixed content (http pages have no
-"mixed" content — they are wholly insecure, reported separately as insecure_page).
+"mixed" content: they are wholly insecure, reported separately as insecure_page).
 
 Uses only the Python standard library.
 """

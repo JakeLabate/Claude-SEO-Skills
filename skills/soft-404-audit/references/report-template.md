@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Soft 404 Audit — {site}
+# Soft 404 Audit: {site}
 
 **Date:** {date}
 **Scope:** {pages crawled}
@@ -45,7 +45,7 @@ soft 404, and that this is a single server/router fix.}
 
 ## Prioritized action list
 
-1. {If the probe returned 200: fix the server/router to return real 404s — this is
+1. {If the probe returned 200, fix the server/router to return real 404s; this is
    the top fix and clears the whole class. Otherwise lead with the confirmed soft
    404s.}
 2. ...

@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Mixed Content / HTTPS Audit — {site}
+# Mixed Content / HTTPS Audit: {site}
 
 **Date:** {date}
 **Scope:** {pages crawled}
@@ -23,7 +23,7 @@ insecure resources (often one CDN/host or one template).}
 ## High-severity issues
 
 ### Active mixed content ({n})
-Blocked by browsers — these break the page.
+Blocked by browsers: these break the page.
 
 | Page | Tag | Insecure resource | Fix |
 |---|---|---|---|
@@ -53,18 +53,18 @@ Blocked by browsers — these break the page.
 
 ## Prioritized action list
 
-1. {Highest-impact fix — usually "switch host/CDN X to https", which clears many
+1. {Highest-impact fix, usually "switch host/CDN X to https", which clears many
    rows at once. Name the host and the affected pages.}
 2. ...
 ```
 
 ## Guidance
 
-- Group insecure resources by **host** — one CDN or analytics provider on `http`
+- Group insecure resources by **host**: one CDN or analytics provider on `http`
   usually explains most rows and is a single fix.
 - Lead with active mixed content and insecure forms; those break functionality.
 - Every row names the exact page, the tag/attribute, and the insecure URL; the fix
   is almost always "use https://".
 - If many pages are served over `http`, the real fix is the site-wide HTTPS
-  redirect — note it and point to the `redirect-audit` skill.
+  redirect: note it and point to the `redirect-audit` skill.
 - Base everything on the crawled resource inventory; never invent URLs.

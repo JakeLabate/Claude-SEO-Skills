@@ -11,13 +11,13 @@ Usage:
 
 Two layers of data are collected:
 
-1. LAB PROXIES (always, stdlib only) — static signals that correlate with the
+1. LAB PROXIES (always, stdlib only): static signals that correlate with the
    Core Web Vitals without a real browser: measured TTFB, HTML transfer size and
    compression, render-blocking CSS/JS in the head, total subresource weight by
    type, request counts, image dimension/lazy-loading hygiene (CLS / LCP), an
    approximate DOM node count, third-party origins, and resource hints present.
 
-2. PSI FIELD + LAB (optional, --psi) — Google PageSpeed Insights returns real
+2. PSI FIELD + LAB (optional, --psi): Google PageSpeed Insights returns real
    CrUX field metrics (LCP, CLS, INP, FCP, TTFB) and a Lighthouse lab score.
    This is the authoritative Core Web Vitals source; the lab proxies above are a
    fast, browserless approximation for when PSI is unavailable or rate-limited.

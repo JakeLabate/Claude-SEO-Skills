@@ -21,10 +21,10 @@ Use this skill when the user asks to:
 
 Before starting, confirm with the user:
 
-1. **Site URL or local files** — a live site root URL (e.g., `https://example.com`), a sitemap URL, a list of URLs, or a local folder of HTML files.
-2. **Scope** — full site, a specific section (e.g., `/blog/`), or a list of URLs.
-3. **Crawl limits** — max pages (default 500) for live crawls.
-4. **Brand suffix** — the brand pattern appended to titles (e.g., `| Acme Co`), if any, so brand-only and duplicate-after-brand titles can be detected accurately.
+1. **Site URL or local files**: a live site root URL (e.g., `https://example.com`), a sitemap URL, a list of URLs, or a local folder of HTML files.
+2. **Scope**: full site, a specific section (e.g., `/blog/`), or a list of URLs.
+3. **Crawl limits**: max pages (default 500) for live crawls.
+4. **Brand suffix**: the brand pattern appended to titles (e.g., `| Acme Co`), if any, so brand-only and duplicate-after-brand titles can be detected accurately.
 
 ## Workflow
 
@@ -42,7 +42,7 @@ python3 scripts/extract_metadata.py https://example.com --max-pages 500 --output
 
 For every page, the inventory records: every `<title>` and `<meta name="description">` value (including duplicates), the first `<h1>`, canonical URL, meta robots, and `og:title`/`og:description` for comparison.
 
-If you've already crawled the site once into a shared page cache (e.g. as part of a full SEO audit), skip the crawl and extract from it instead — same inventory, no extra network:
+If you've already crawled the site once into a shared page cache (e.g. as part of a full SEO audit), skip the crawl and extract from it instead (same inventory, no extra network):
 
 ```bash
 python3 scripts/fetch_pages.py https://example.com --output page_cache.json   # crawl once
@@ -83,10 +83,10 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — pages crawled, titles and descriptions found, issue counts by severity
-2. **Length distribution** — how titles and descriptions spread across short/good/long bands
-3. **Issues** — one section per failing check, listing the page, the current value, and a specific fix
-4. **Prioritized action list** — ordered by severity and estimated impact
+1. **Summary**: pages crawled, titles and descriptions found, issue counts by severity
+2. **Length distribution**: how titles and descriptions spread across short/good/long bands
+3. **Issues**: one section per failing check, listing the page, the current value, and a specific fix
+4. **Prioritized action list**: ordered by severity and estimated impact
 
 ### Step 5: Recommend fixes
 
@@ -123,13 +123,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, thresholds, and rationale for every audit check
-- `references/report-template.md` — report output structure
-- `scripts/extract_metadata.py` — crawl a site and build the title/description inventory
-- `scripts/audit_metadata.py` — run audit checks against a metadata inventory JSON file
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, thresholds, and rationale for every audit check
+- `references/report-template.md`: report output structure
+- `scripts/extract_metadata.py`: crawl a site and build the title/description inventory
+- `scripts/audit_metadata.py`: run audit checks against a metadata inventory JSON file

@@ -22,12 +22,12 @@ directly instead.
 
 ## Inputs to collect
 
-1. **Site URL** — the live site root (e.g., `https://example.com`).
-2. **Scope** — how many pages to crawl (default ~200) and how many sitemap URLs
+1. **Site URL**: the live site root (e.g., `https://example.com`).
+2. **Scope**: how many pages to crawl (default ~200) and how many sitemap URLs
    to probe. Larger sites should be sampled.
-3. **Focus** — run everything (default), or a chosen subset (e.g., "just
+3. **Focus**: run everything (default), or a chosen subset (e.g., "just
    crawlability and indexation"). Map the user's intent to the skills below.
-4. **API key (optional)** — Core Web Vitals field data needs a Google PageSpeed
+4. **API key (optional)**: Core Web Vitals field data needs a Google PageSpeed
    Insights key; without it, that audit uses lab proxies only.
 
 ## Coverage map
@@ -75,7 +75,7 @@ no extra crawl) then its audit script. Save each audit output to the shared
 folder using a stable, skill-named filename so they can be merged:
 
 ```bash
-# repeat per in-scope page-based skill — all read the ONE page_cache.json
+# repeat per in-scope page-based skill: all read the ONE page_cache.json
 python3 ../meta-data-audit/scripts/extract_metadata.py --from-cache audits/page_cache.json --output audits/meta.inventory.json
 python3 ../meta-data-audit/scripts/audit_metadata.py audits/meta.inventory.json --output audits/meta-data-audit.audit_report.json
 
@@ -86,11 +86,11 @@ python3 ../heading-structure-audit/scripts/audit_headings.py audits/head.invento
 The skills that read `--from-cache` are: meta-data, heading-structure,
 image-seo, schema-markup, open-graph, content-quality, keyword-cannibalization,
 mixed-content, canonical-tag, pagination, soft-404, and external-link. (A few
-also run a small secondary probe — canonical targets, share images, the soft-404
-missing-page probe — on top of the cached crawl.)
+also run a small secondary probe on top of the cached crawl, for canonical
+targets, share images and the soft-404 missing-page probe.)
 
 The non-page audits fetch their own thing and don't use the page cache: run them
-per their own `SKILL.md` — `sitemap-audit`, `robots-txt-audit`, `llms-txt-audit`,
+per their own `SKILL.md`: `sitemap-audit`, `robots-txt-audit`, `llms-txt-audit`,
 `redirect-audit`, `core-web-vitals-audit`, plus `internal-link-audit` and
 `site-architecture-audit` (which crawl with depth tracking of their own).
 
@@ -109,27 +109,27 @@ flat list of every failing check ranked by severity then count.
 
 Write the report following `references/report-template.md`:
 
-1. **Executive summary** — overall health, issue counts by severity, the 3–5
+1. **Executive summary**: overall health, issue counts by severity, the 3–5
    highest-impact fixes across all areas.
-2. **Scorecard** — one row per audited area with its issue counts and a status.
-3. **Findings by area** — a short section per skill summarizing its top issues
+2. **Scorecard**: one row per audited area with its issue counts and a status.
+3. **Findings by area**: a short section per skill summarizing its top issues
    and linking to (or inlining) that skill's own detailed report.
-4. **Prioritized roadmap** — a single cross-area action list ordered by impact,
+4. **Prioritized roadmap**: a single cross-area action list ordered by impact,
    not by area.
 
 ### Step 5: Prioritize across areas
 
 Rank fixes by impact, not by which skill found them. Apply this order:
 
-1. **Indexation blockers first** — anything stopping pages from being crawled or
+1. **Indexation blockers first**: anything stopping pages from being crawled or
    indexed (robots `Disallow: /`, sitewide noindex, sitemap full of dead URLs,
    broken canonicals) outranks on-page polish.
-2. **Sitewide/template issues over one-off issues** — a bug in one template
+2. **Sitewide/template issues over one-off issues**: a bug in one template
    affecting 500 pages beats a single page's long title.
 3. **High-traffic, high-intent pages first** within a given fix.
 4. Group related findings across skills (e.g., the same `http→https` migration
    surfaces in sitemap, redirect, internal-link, canonical, and mixed-content
-   audits — present it once as a single root-cause fix).
+   audits: present it once as a single root-cause fix).
 
 ## Optional: export the report
 
@@ -151,12 +151,12 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/report-template.md` — consolidated report structure
-- `references/coverage-map.md` — what each sub-skill covers and what it needs
-- `scripts/consolidate_reports.py` — merge per-skill audit reports into one ranked report
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/report-template.md`: consolidated report structure
+- `references/coverage-map.md`: what each sub-skill covers and what it needs
+- `scripts/consolidate_reports.py`: merge per-skill audit reports into one ranked report

@@ -21,10 +21,10 @@ Use this skill when the user asks to:
 
 Before starting, confirm with the user:
 
-1. **Site URL or local files** — a live site root URL (e.g., `https://example.com`), a sitemap URL, a list of URLs, or a local folder of HTML files.
-2. **Scope** — full site, a specific section (e.g., `/products/`), or a list of URLs.
-3. **Crawl limits** — max pages (default 200) for live crawls.
-4. **Business context** — site type (e-commerce, blog, local business, SaaS, etc.) so page-type-to-schema-type expectations can be set.
+1. **Site URL or local files**: a live site root URL (e.g., `https://example.com`), a sitemap URL, a list of URLs, or a local folder of HTML files.
+2. **Scope**: full site, a specific section (e.g., `/products/`), or a list of URLs.
+3. **Crawl limits**: max pages (default 200) for live crawls.
+4. **Business context**: site type (e-commerce, blog, local business, SaaS, etc.) so page-type-to-schema-type expectations can be set.
 
 ## Workflow
 
@@ -87,11 +87,11 @@ Validate one representative URL per page template rather than every page.
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — pages scanned, schema blocks found, types in use, issue counts by severity
-2. **Coverage map** — page types vs. expected schema types, showing gaps
-3. **Issues** — one section per failing check, listing affected page, schema type, property, and a specific fix
-4. **Opportunities** — schema types worth adding for rich result eligibility
-5. **Prioritized action list** — ordered by severity and estimated impact
+1. **Summary**: pages scanned, schema blocks found, types in use, issue counts by severity
+2. **Coverage map**: page types vs. expected schema types, showing gaps
+3. **Issues**: one section per failing check, listing affected page, schema type, property, and a specific fix
+4. **Opportunities**: schema types worth adding for rich result eligibility
+5. **Prioritized action list**: ordered by severity and estimated impact
 
 ### Step 6: Recommend fixes
 
@@ -123,13 +123,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, severities, and rationale for every audit check, plus required/recommended properties per schema type
-- `references/report-template.md` — report output structure
-- `scripts/extract_schema.py` — crawl pages and extract all structured data into a JSON inventory
-- `scripts/validate_schema.py` — run audit checks against a schema inventory JSON file
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, severities, and rationale for every audit check, plus required/recommended properties per schema type
+- `references/report-template.md`: report output structure
+- `scripts/extract_schema.py`: crawl pages and extract all structured data into a JSON inventory
+- `scripts/validate_schema.py`: run audit checks against a schema inventory JSON file

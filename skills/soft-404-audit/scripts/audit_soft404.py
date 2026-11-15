@@ -10,7 +10,7 @@ Checks (see references/audit-checks.md):
 - missing_returns_200 (high): the missing-page probe returned 200 instead of 404/410
   (the site serves a soft 404 for every unknown URL)
 - thin_error_page (medium): HTTP 200 page that is both very thin AND matches the
-  missing-page probe's fingerprint (title/word count) — likely a masked error page
+  missing-page probe's fingerprint (title/word count), likely a masked error page
 - empty_page (low): HTTP 200 page with almost no visible text and no error phrase
 
 Uses only the Python standard library.
@@ -45,7 +45,7 @@ def main():
         findings["missing_returns_200"].append({
             "probe_url": probe.get("url"),
             "status": probe.get("status"),
-            "note": "A non-existent URL returned 200 — the site serves a soft 404 "
+            "note": "A non-existent URL returned 200: the site serves a soft 404 "
                     "for unknown URLs instead of a real 404/410."})
 
     for url, page in pages.items():

@@ -151,7 +151,7 @@ def extract_from_cache(cache_path):
 
     Reads the cached HTML *and response headers* (the Link: rel=canonical and
     X-Robots-Tag headers this audit needs). The canonical-target probe is left to
-    the caller — those targets may sit outside the crawl set.
+    the caller: those targets may sit outside the crawl set.
     """
     with open(cache_path, encoding="utf-8") as f:
         cache = json.load(f)

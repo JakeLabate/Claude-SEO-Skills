@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# llms.txt Audit — {site}
+# llms.txt Audit: {site}
 
 **Date:** {date}
 **File:** {status} | **Sections:** {n} | **Links:** {found} ({probed} probed) | **llms-full.txt:** {yes/no}
@@ -90,6 +90,6 @@ redirecting /llms.txt, wrong content type. Same style: item, problem, fix.}
 - Every issue row must name the exact URL or list item and a concrete action ("replace with {final URL}", "add `: description`", "use absolute URL").
 - Reinforce the core rule in the summary: llms.txt links should point to final, canonical, reachable `200` pages, each with a clear description.
 - Provide a corrected or starter markdown block so the user can copy-paste the fix.
-- Treat `/llms-full.txt` as optional — note its absence, but do not present it as a defect unless the user wants full-content ingestion.
+- Treat `/llms-full.txt` as optional: note its absence, but do not present it as a defect unless the user wants full-content ingestion.
 - Cap link tables at ~20 rows in the report body; offer the full list (CSV/JSON) if larger.
 - Order the action list by severity first, then by how many links each fix repairs.

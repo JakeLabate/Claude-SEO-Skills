@@ -2,7 +2,7 @@
 
 Full definitions, thresholds, and rationale for each audit check.
 
-The guiding principle: **robots.txt should return a small, valid `200` plain-text file from the site root that lets crawlers reach every page and resource you want indexed, declares your sitemap, and blocks only what you deliberately want kept out of the crawl.** Remember that robots.txt governs *crawling*, not *indexing* — a disallowed URL can still appear in search results without a snippet.
+The guiding principle: **robots.txt should return a small, valid `200` plain-text file from the site root that lets crawlers reach every page and resource you want indexed, declares your sitemap, and blocks only what you deliberately want kept out of the crawl.** Remember that robots.txt governs *crawling*, not *indexing*: a disallowed URL can still appear in search results without a snippet.
 
 ## High severity
 
@@ -27,12 +27,12 @@ The guiding principle: **robots.txt should return a small, valid `200` plain-tex
 ### 4. Sitewide `Disallow: /`
 
 - **Definition:** A user-agent group contains `Disallow: /` with no `Allow:` re-opening the root.
-- **Why it matters:** This blocks the entire site from crawling. When it targets `User-agent: *` it is the single most damaging robots.txt mistake — commonly left over from a staging environment and pushed to production.
+- **Why it matters:** This blocks the entire site from crawling. When it targets `User-agent: *` it is the single most damaging robots.txt mistake, commonly left over from a staging environment and pushed to production.
 - **Fix:** Remove the line, or scope the block to the specific paths you mean to exclude. Confirm intent before keeping any sitewide block on a live site.
 
 ### 5. Syntax error
 
-- **Definition:** A line is malformed — missing the `field: value` colon, a `Disallow`/`Allow` appearing before any `User-agent`, or an empty `User-agent`/`Sitemap` value.
+- **Definition:** A line is malformed: missing the `field: value` colon, a `Disallow`/`Allow` appearing before any `User-agent`, or an empty `User-agent`/`Sitemap` value.
 - **Why it matters:** Crawlers skip lines they cannot parse, so a typo can silently drop a rule or attach rules to the wrong group, producing crawl behavior you never intended.
 - **Fix:** Correct each line to `field: value`, and make sure every `Disallow`/`Allow` follows a `User-agent` declaration.
 
@@ -40,7 +40,7 @@ The guiding principle: **robots.txt should return a small, valid `200` plain-tex
 
 - **Definition:** robots.txt is larger than 500 KiB.
 - **Why it matters:** Google only parses the first 500 KiB; any rules past that point are ignored, which can unexpectedly expose or block paths.
-- **Fix:** Trim the file — consolidate rules with wildcards (`*`, `$`) and remove dead entries so all directives fit under the limit.
+- **Fix:** Trim the file: consolidate rules with wildcards (`*`, `$`) and remove dead entries so all directives fit under the limit.
 
 ## Medium severity
 
@@ -70,8 +70,8 @@ The guiding principle: **robots.txt should return a small, valid `200` plain-tex
 
 ### 11. Unsupported directive
 
-- **Definition:** A directive Google does not support appears in the file — most importantly `noindex` and `nofollow`, plus `crawl-delay`, `host`, `request-rate`, `clean-param`.
-- **Why it matters:** These are silently ignored by Google. Relying on `noindex` in robots.txt to deindex a page does not work — the page stays indexable. `crawl-delay` gives a false sense of rate control.
+- **Definition:** A directive Google does not support appears in the file, most importantly `noindex` and `nofollow`, plus `crawl-delay`, `host`, `request-rate`, `clean-param`.
+- **Why it matters:** These are silently ignored by Google. Relying on `noindex` in robots.txt to deindex a page does not work: the page stays indexable. `crawl-delay` gives a false sense of rate control.
 - **Fix:** Remove them. Enforce `noindex`/`nofollow` via meta robots or `X-Robots-Tag` on crawlable pages; manage crawl rate in Search Console.
 
 ## Low severity
@@ -85,7 +85,7 @@ The guiding principle: **robots.txt should return a small, valid `200` plain-tex
 ### 13. Duplicate `User-agent: *` group
 
 - **Definition:** More than one `User-agent: *` group exists.
-- **Why it matters:** Rules may be merged or, in some parsers, only one group honored — making behavior ambiguous and hard to maintain.
+- **Why it matters:** Rules may be merged or, in some parsers, only one group honored, making behavior ambiguous and hard to maintain.
 - **Fix:** Consolidate all `*` rules into a single group.
 
 ### 14. UTF-8 BOM present

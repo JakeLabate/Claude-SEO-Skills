@@ -3,7 +3,7 @@
 Use this structure for the final report delivered to the user.
 
 ```markdown
-# Robots.txt Audit — {site}
+# Robots.txt Audit: {site}
 
 **Date:** {date}
 **Fetch:** {status} {content_type} | **Groups:** {n} | **Sitemaps declared:** {n}
@@ -17,7 +17,7 @@ Use this structure for the final report delivered to the user.
 | Low | {n} |
 
 {2–3 sentence overview of robots.txt health and the biggest wins. Lead with any
-sitewide block, 5xx, redirect, or HTML-served file — those are emergencies.}
+sitewide block, 5xx, redirect, or HTML-served file: those are emergencies.}
 
 ## Fetch & file
 
@@ -60,7 +60,7 @@ or line, and the fix. These can deindex the whole site.}
 
 | Issue | Detail | Fix |
 |---|---|---|
-| No Sitemap: line | — | Add `Sitemap: https://example.com/sitemap.xml` |
+| No Sitemap: line | - | Add `Sitemap: https://example.com/sitemap.xml` |
 | Unreachable sitemap | https://… → 404 | Fix the sitemap or update the URL |
 
 ### Other ({n})

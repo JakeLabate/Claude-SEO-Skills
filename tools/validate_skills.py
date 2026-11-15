@@ -9,7 +9,7 @@ Checks, for each `skills/<skill-name>/` folder containing a SKILL.md:
   4. Every `scripts/<file>` and `references/<file>` path mentioned in SKILL.md
      actually exists on disk.
   5. Every `scripts/*.py` referenced (and every .py in the repo) compiles with
-     `py_compile` — i.e. is syntactically valid Python.
+     `py_compile`: i.e. is syntactically valid Python.
   6. Each skill has at least one reference doc and one script (a soft warning).
 
 Exits non-zero if any error is found, so it can gate CI.

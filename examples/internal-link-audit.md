@@ -1,6 +1,6 @@
 <!-- Illustrative sample output for the internal-link-audit skill. Fictional data. -->
 
-# Internal Link Audit — example.com
+# Internal Link Audit: example.com
 
 **Date:** 2026-06-18
 **Scope:** Crawled 142 same-host pages from the homepage; built the internal link graph.
@@ -33,7 +33,7 @@ flattening depth will spread link equity to the pages that monetize.
 
 ### Orphan pages (17)
 
-Reachable from the sitemap but not linked from any page — they accrue almost no
+Reachable from the sitemap but not linked from any page: they accrue almost no
 internal equity.
 
 | Orphan page | Suggested link source |
@@ -54,7 +54,7 @@ internal equity.
 
 ### Redirecting internal links (34)
 
-Internal links pointing at URLs that 301 elsewhere — each wastes a hop and a
+Internal links pointing at URLs that 301 elsewhere; each wastes a hop and a
 little equity. Update the `href` to the final destination.
 
 | Linking page | Link target | Redirects to |
@@ -80,7 +80,7 @@ little equity. Update the `href` to the final destination.
 
 1. **Link the 17 orphan product/blog pages** from their category and related
    sections (high). Biggest equity redistribution.
-2. **Fix the 11 broken internal links** (high) — update targets or remove.
+2. **Fix the 11 broken internal links** (high): update targets or remove.
 3. **Repoint the 34 redirecting links to final URLs** (medium); most are the
    trailing-slash 301, fixable in the nav template.
 4. **Flatten the 9 deep pages to ≤ 3 clicks** (medium) with contextual links.

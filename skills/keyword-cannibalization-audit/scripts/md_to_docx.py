@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Convert a Markdown audit report into a Word (.docx) document.
 
-Standard-library only — no pip install. A .docx is a ZIP of OOXML parts, so we
+Standard-library only, no pip install. A .docx is a ZIP of OOXML parts, so we
 build the minimal set of parts a reader needs and stream them out with zipfile.
 
 This is the canonical copy. An identical copy lives in every skill's scripts/
@@ -138,7 +138,7 @@ def parse_blocks(md):
             blocks.append({"type": "quote", "text": " ".join(quote)})
             continue
 
-        # List (unordered or ordered) — consume consecutive item lines
+        # List (unordered or ordered): consume consecutive item lines
         if re.match(r"^\s*([-*+]|\d+\.)\s+", line):
             items = []
             ordered = bool(re.match(r"^\s*\d+\.\s+", line))
@@ -150,7 +150,7 @@ def parse_blocks(md):
             blocks.append({"type": "list", "ordered": ordered, "items": items})
             continue
 
-        # Paragraph — gather until a blank line or a block starter
+        # Paragraph: gather until a blank line or a block starter
         para = [stripped]
         i += 1
         while i < n and lines[i].strip() and not _is_block_start(lines[i], lines, i):

@@ -20,7 +20,7 @@ wrong silently removes pages from the index or splits ranking signals.
 - **Why it matters:** Conflicting canonicals are ambiguous; Google ignores them
   all and falls back to its own choice.
 - **Fix:** Emit exactly one canonical. Usually a CMS theme plus an SEO plugin both
-  inject one — remove the duplicate.
+  inject one: remove the duplicate.
 
 ### 3. Canonical points to a non-200 URL
 - **Definition:** The canonical target returns 4xx/5xx or fails to load.
@@ -39,7 +39,7 @@ wrong silently removes pages from the index or splits ranking signals.
 ### 5. Canonical points to a noindex URL
 - **Definition:** The canonical target carries `noindex` (meta or `X-Robots-Tag`).
 - **Why it matters:** You're consolidating signals onto a page you've told the
-  engine not to index — contradictory; both URLs can end up dropped.
+  engine not to index: contradictory; both URLs can end up dropped.
 - **Fix:** Canonicalize to an indexable URL, or remove the noindex from the target.
 
 ### 6. Relative canonical
@@ -78,7 +78,7 @@ wrong silently removes pages from the index or splits ranking signals.
 
 ## Informational (note, not counted as an issue)
 
-- **Non-self canonical** — the page canonicalizes to a *different* URL. This is
+- **Non-self canonical**: the page canonicalizes to a *different* URL. This is
   legitimate and common (parameter variants, print pages, syndicated copies). It
   is reported so you can confirm each one is intentional and that the target is
-  the right consolidation point — not because it is inherently wrong.
+  the right consolidation point, not because it is inherently wrong.

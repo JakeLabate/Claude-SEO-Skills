@@ -1,6 +1,6 @@
 ---
 name: core-web-vitals-audit
-description: Audit a website's Core Web Vitals and page-experience signals (LCP, CLS, INP, TTFB). Optionally pulls real field data from Google PageSpeed Insights (CrUX) and always collects browserless lab proxies — render-blocking CSS/JS, page weight, image dimension and lazy-loading hygiene, TTFB, text compression, DOM size, request counts, and third-party origins. Use when the user asks to audit, analyze, check, or improve Core Web Vitals, page speed, performance, LCP, CLS, INP, page experience, or loading speed of a website.
+description: Audit a website's Core Web Vitals and page-experience signals (LCP, CLS, INP, TTFB). Optionally pulls real field data from Google PageSpeed Insights (CrUX) and always collects browserless lab proxies (render-blocking CSS/JS, page weight, image dimension and lazy-loading hygiene, TTFB, text compression, DOM size, request counts, and third-party origins). Use when the user asks to audit, analyze, check, or improve Core Web Vitals, page speed, performance, LCP, CLS, INP, page experience, or loading speed of a website.
 ---
 
 # Core Web Vitals Audit
@@ -21,7 +21,7 @@ Use this skill when the user asks to:
 
 Core Web Vitals are ultimately a **field** metric (real users, measured in CrUX). This skill collects two complementary layers:
 
-1. **Lab proxies (always, no browser required):** static signals that strongly correlate with the vitals — measured TTFB, page weight, render-blocking CSS/JS, image dimension/lazy-loading hygiene, DOM size, request counts, third-party origins, text compression, and resource hints. Fast and dependency-free, but an approximation.
+1. **Lab proxies (always, no browser required):** static signals that strongly correlate with the vitals: measured TTFB, page weight, render-blocking CSS/JS, image dimension/lazy-loading hygiene, DOM size, request counts, third-party origins, text compression, and resource hints. Fast and dependency-free, but an approximation.
 2. **PSI field + lab (optional, `--psi`):** real CrUX field metrics (LCP, CLS, INP, FCP, TTFB) plus a Lighthouse lab score from Google PageSpeed Insights. This is the authoritative source; use it when you need real numbers and have network access.
 
 When PSI data is present, treat it as the verdict ("is this page passing?") and use the lab proxies to explain **why** and what to fix.
@@ -30,10 +30,10 @@ When PSI data is present, treat it as the verdict ("is this page passing?") and 
 
 Before starting, confirm with the user:
 
-1. **Site URL or URL set** — a live site root URL, a sitemap (`--sitemap`), or a URL list (`--url-list`). Pick representative templates (home, a product/article, a category) rather than the whole site.
-2. **Scope** — max pages (default 50; collection is heavier than a text crawl because it fetches subresources).
-3. **PSI** — whether to fetch PageSpeed Insights field data (`--psi`), the strategy (`mobile` default, or `desktop`), and an optional API key (`--psi-key`) to raise rate limits.
-4. **Budgets** — optional overrides for total page weight, TTFB, JS/CSS size, and DOM node count.
+1. **Site URL or URL set**: a live site root URL, a sitemap (`--sitemap`), or a URL list (`--url-list`). Pick representative templates (home, a product/article, a category) rather than the whole site.
+2. **Scope**: max pages (default 50; collection is heavier than a text crawl because it fetches subresources).
+3. **PSI**: whether to fetch PageSpeed Insights field data (`--psi`), the strategy (`mobile` default, or `desktop`), and an optional API key (`--psi-key`) to raise rate limits.
+4. **Budgets**: optional overrides for total page weight, TTFB, JS/CSS size, and DOM node count.
 
 ## Workflow
 
@@ -83,7 +83,7 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 | Images missing width/height | CLS | Medium |
 | Too many requests (> 80) | LCP | Medium |
 | Large JS payload (> budget) | INP | Medium |
-| Missing viewport meta | — | Medium |
+| Missing viewport meta | - | Medium |
 | Missing preconnect for third parties | LCP | Low |
 | Large CSS payload | LCP | Low |
 | No lazy-loading on image-heavy page | LCP | Low |
@@ -92,10 +92,10 @@ Evaluate each check defined in `references/audit-checks.md`. The core checks are
 
 Write a report following the structure in `references/report-template.md`:
 
-1. **Summary** — pages analyzed, whether PSI field data was used, median page weight, issue counts by severity
-2. **Field vitals** (if PSI used) — per page: LCP / CLS / INP with pass/fail
-3. **Issues** — one section per failing check, mapped to the vital it affects, with the page, the measurement, and the fix
-4. **Prioritized action list** — ordered by severity and by which vital is failing in the field
+1. **Summary**: pages analyzed, whether PSI field data was used, median page weight, issue counts by severity
+2. **Field vitals** (if PSI used), per page: LCP / CLS / INP with pass/fail
+3. **Issues**: one section per failing check, mapped to the vital it affects, with the page, the measurement, and the fix
+4. **Prioritized action list**: ordered by severity and by which vital is failing in the field
 
 ### Step 5: Recommend fixes
 
@@ -104,7 +104,7 @@ Map every fix to the vital it improves and quantify where possible:
 - **LCP:** preload the hero image, never lazy-load it, add `fetchpriority="high"`; enable text compression; cut render-blocking CSS/JS (inline critical CSS, `defer`/`async` scripts); reduce TTFB (caching/CDN); compress and right-size the LCP image.
 - **CLS:** add `width`/`height` (or `aspect-ratio`) to every image and embed; reserve space for ads/embeds; preload fonts and use `font-display: optional/swap`.
 - **INP:** reduce and split long JavaScript tasks; remove unused JS; defer non-critical third-party scripts; shrink an oversized DOM.
-- Base every recommendation on the measured data (e.g., "your LCP image `/hero.jpg` has `loading="lazy"` — remove it"); never invent metrics. If PSI field data is unavailable for a URL (low traffic), say so and lean on the lab proxies.
+- Base every recommendation on the measured data (e.g., "your LCP image `/hero.jpg` has `loading="lazy"`: remove it"); never invent metrics. If PSI field data is unavailable for a URL (low traffic), say so and lean on the lab proxies.
 
 ## Optional: export the report
 
@@ -126,13 +126,13 @@ If the user wants the raw findings as a spreadsheet (for filtering, sorting, or 
 python3 scripts/findings_to_csv.py audit_report.json --output findings.csv
 ```
 
-`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings — offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
+`scripts/findings_to_csv.py` is also standard-library only. It writes one row per finding, with `check` and `severity` columns prepended and list fields (e.g. the pages sharing a duplicate value) joined with `; `. Unlike the `.docx`, which reformats the written report, the CSV is a direct dump of the structured findings: offer it whenever a user wants the data itself, a spreadsheet, or to slice findings by check or severity.
 
 ## Resources
 
-- `scripts/md_to_docx.py` — convert the Markdown report into a Word (.docx) document (standard library only)
-- `scripts/findings_to_csv.py` — flatten the audit findings JSON into a CSV, one row per finding (standard library only)
-- `references/audit-checks.md` — full definitions, thresholds, vital mapping, and rationale for every check
-- `references/report-template.md` — report output structure
-- `scripts/collect_vitals.py` — collect lab proxies (and optional PSI field/lab data) for a set of pages
-- `scripts/audit_vitals.py` — run audit checks against a vitals inventory JSON file
+- `scripts/md_to_docx.py`: convert the Markdown report into a Word (.docx) document (standard library only)
+- `scripts/findings_to_csv.py`: flatten the audit findings JSON into a CSV, one row per finding (standard library only)
+- `references/audit-checks.md`: full definitions, thresholds, vital mapping, and rationale for every check
+- `references/report-template.md`: report output structure
+- `scripts/collect_vitals.py`: collect lab proxies (and optional PSI field/lab data) for a set of pages
+- `scripts/audit_vitals.py`: run audit checks against a vitals inventory JSON file

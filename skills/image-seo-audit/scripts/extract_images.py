@@ -155,7 +155,7 @@ def parse_page(url, html):
 def extract_from_cache(cache_path):
     """Pure: turn a shared page cache (from fetch_pages.py) into an image inventory.
 
-    No network — parses the cached HTML for exactly the fields this audit needs.
+    No network: parses the cached HTML for exactly the fields this audit needs.
     (The optional --check-files image HEAD-probe still hits the network if asked.)
     """
     with open(cache_path, encoding="utf-8") as f:
